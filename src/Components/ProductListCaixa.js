@@ -32,7 +32,7 @@ const Caixa = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch("https://lalitaapi.onrender.com/Produtos");
+        const response = await fetch("https://carmelisapi.onrender.com/Produtos");
         if (!response.ok) throw new Error("Erro ao buscar produtos");
         const data = await response.json();
        // Converte o objeto de produtos em um array
@@ -51,7 +51,7 @@ const Caixa = () => {
 
     const fetchClients = async () => {
       try {
-        const response = await fetch("https://lalitaapi.onrender.com/Clientes");
+        const response = await fetch("https://carmelisapi.onrender.com/Clientes");
         if (!response.ok) throw new Error("Erro ao buscar Clientes");
         const data = await response.json();
        // Converte o objeto de produtos em um array
@@ -111,7 +111,7 @@ const Caixa = () => {
     });
     
     toast.isActive('Compra finalizada com Sucesso')
-    const response = await fetch("https://lalitaapi.onrender.com/Vendas", {
+    const response = await fetch("https://carmelisapi.onrender.com/Vendas", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -144,61 +144,42 @@ const Caixa = () => {
   }
   };
   
-  const atualizarQuantidadeProdutos = async () => {
-    const promises = carrinho.map(async (item) => {
+  const atualizarQuantidadeProdutos = () => {
+    carrinho.forEach((item) => {
       const productid = item.produto.productid;
       const quantidadeVendida = item.quantidade;
       const novaQuantidade = item.produto.Quantidade - quantidadeVendida;
-  
-      try {
-        if (novaQuantidade === 0) {
-          const response = await fetch(`https://lalitaapi.onrender.com/Produtos/${productid}`, {
-            method: "DELETE",
-            headers: {
-              "Content-Type": "application/json"
-            },
-          });
-  
-          if (response.ok) {
-            toast.success(`Produto ${item.produto.nome} removido com sucesso`);
-            console.log(`Produto ${item.produto.nome} removido.`);
-          } else {
-            toast.error(`Erro ao remover o produto ${item.produto.nome}`);
-            console.error(`Erro ao remover o produto: ${response.statusText}`);
-          }
-        } else {
-          const response = await fetch(`https://lalitaapi.onrender.com/Produtos/${productid}`, {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              nome: item.produto.nome,
-              descricao: item.produto.descricao,
-              preco: item.produto.preco,
-              precovenda: item.produto.precovenda,
-              quantidade: novaQuantidade
-            })
-          });
-           console.log(response)
-          if (response.ok) {
-            toast.success(`Produto ${item.produto.nome} atualizado com sucesso`);
-            console.log(`Produto ${item.produto.nome} atualizado:`, await response.json());
-          } else {
-            toast.error(`Erro ao atualizar o produto ${item.produto.nome}`);
-            console.error(`Erro ao atualizar o produto: ${response.statusText}`);
-          }
-        }
-      } catch (error) {
-        toast.error(`Erro ao processar o produto ${item.produto.nome}: ${error.message}`);
-        console.error(`Erro ao processar o produto:`, error);
-      }
-    });
-  
-    // Aguarda que todas as promessas sejam resolvidas
-    await Promise.all(promises);
-  };
-  
+
+      if(novaQuantidade === 0){
+        fetch(`https://carmelisapi.onrender.com/Produtos/${productid}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json"
+          },
+        })
+      } else {
+     const response =  fetch(`https://carmelisapi.onrender.com/Produtos/${productid}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        nome: item.produto.nome,
+        descricao: item.produto.descricao,
+        preco: item.produto.preco,
+        precovenda: item.produto.precovenda,
+        quantidade: novaQuantidade
+      })
+    })
+    console.log(response);
+    if (response.ok) {
+      toast.success('Produto atualizado com sucesso')
+      console.log(response);
+    }
+   }
+ });
+}
+
 const handleChange = (e) => {
   setDataToInsert({
     ...dataToInsert,
