@@ -180,7 +180,7 @@ const Caixa = () => {
               quantidade: novaQuantidade
             })
           });
-  
+           console.log(response)
           if (response.ok) {
             toast.success(`Produto ${item.produto.nome} atualizado com sucesso`);
             console.log(`Produto ${item.produto.nome} atualizado:`, await response.json());
