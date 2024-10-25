@@ -10,6 +10,7 @@ import { ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 
+
 const Caixa = () => {
   const [produtos, setProdutos] = useState([]);
   const [carrinho, setCarrinho] = useState([]);
@@ -145,41 +146,46 @@ const Caixa = () => {
   }
   };
   
-  const atualizarQuantidadeProdutos = () => {
-    carrinho.forEach((item) => {
+  const atualizarQuantidadeProdutos = async () => {
+    for (const item of carrinho) {
       const productid = item.produto.productid;
       const quantidadeVendida = item.quantidade;
       const novaQuantidade = item.produto.Quantidade - quantidadeVendida;
 
-      if(novaQuantidade === 0){
-        fetch(`https://lalitaapi.onrender.com/Produtos/${productid}`, {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json"
-          },
-        })
-      } else {
-     const response =  fetch(`https://lalitaapi.onrender.com/Produtos/${productid}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        nome: item.produto.nome,
-        descricao: item.produto.descricao,
-        preco: item.produto.preco,
-        precovenda: item.produto.precovenda,
-        quantidade: novaQuantidade
-      })
-    })
-    console.log(response);
-    if (response.ok) {
-      toast.success('Produto atualizado com sucesso')
-      console.log(response);
+      try {
+        if (novaQuantidade <= 0) {
+          const deleteResponse = await fetch(`https://lalitaapi.onrender.com/Produtos/${productid}`, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+          if (!deleteResponse.ok) throw new Error('Erro ao deletar produto');
+          console.log(`Produto ${productid} deletado com sucesso`);
+        } else {
+          const updateResponse = await fetch(`https://lalitaapi.onrender.com/Produtos/${productid}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              nome: item.produto.nome,
+              descricao: item.produto.descricao,
+              preco: item.produto.preco,
+              precovenda: item.produto.precovenda,
+              quantidade: novaQuantidade,
+            }),
+          });
+
+          if (!updateResponse.ok) throw new Error('Erro ao atualizar produto');
+          console.log(`Produto ${productid} atualizado com sucesso`);
+        }
+      } catch (error) {
+        console.error('Erro ao atualizar quantidade de produtos:', error);
+        toast.error('Erro ao atualizar produtos.');
+      }
     }
-   }
- });
-}
+  };
 
 const handleChange = (e) => {
   setDataToInsert({
