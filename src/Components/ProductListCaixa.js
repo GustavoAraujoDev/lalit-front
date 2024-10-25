@@ -144,41 +144,61 @@ const Caixa = () => {
   }
   };
   
-  const atualizarQuantidadeProdutos = () => {
-    carrinho.forEach((item) => {
+  const atualizarQuantidadeProdutos = async () => {
+    const promises = carrinho.map(async (item) => {
       const productid = item.produto.productid;
       const quantidadeVendida = item.quantidade;
       const novaQuantidade = item.produto.Quantidade - quantidadeVendida;
-
-      if(novaQuantidade === 0){
-        fetch(`https://lalitaapi.onrender.com/Produtos/${productid}`, {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json"
-          },
-        })
-      } else {
-     const response =  fetch(`https://lalitaapi.onrender.com/Produtos/${productid}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        nome: item.produto.nome,
-        descricao: item.produto.descricao,
-        preco: item.produto.preco,
-        precovenda: item.produto.precovenda,
-        quantidade: novaQuantidade
-      })
-    })
-    if (response.ok) {
-      toast.success('Produto atualizado com sucesso')
-      console.log(response);
-    }
-   }
- });
-}
-
+  
+      try {
+        if (novaQuantidade === 0) {
+          const response = await fetch(`https://lalitaapi.onrender.com/Produtos/${productid}`, {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json"
+            },
+          });
+  
+          if (response.ok) {
+            toast.success(`Produto ${item.produto.nome} removido com sucesso`);
+            console.log(`Produto ${item.produto.nome} removido.`);
+          } else {
+            toast.error(`Erro ao remover o produto ${item.produto.nome}`);
+            console.error(`Erro ao remover o produto: ${response.statusText}`);
+          }
+        } else {
+          const response = await fetch(`https://lalitaapi.onrender.com/Produtos/${productid}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              nome: item.produto.nome,
+              descricao: item.produto.descricao,
+              preco: item.produto.preco,
+              precovenda: item.produto.precovenda,
+              quantidade: novaQuantidade
+            })
+          });
+  
+          if (response.ok) {
+            toast.success(`Produto ${item.produto.nome} atualizado com sucesso`);
+            console.log(`Produto ${item.produto.nome} atualizado:`, await response.json());
+          } else {
+            toast.error(`Erro ao atualizar o produto ${item.produto.nome}`);
+            console.error(`Erro ao atualizar o produto: ${response.statusText}`);
+          }
+        }
+      } catch (error) {
+        toast.error(`Erro ao processar o produto ${item.produto.nome}: ${error.message}`);
+        console.error(`Erro ao processar o produto:`, error);
+      }
+    });
+  
+    // Aguarda que todas as promessas sejam resolvidas
+    await Promise.all(promises);
+  };
+  
 const handleChange = (e) => {
   setDataToInsert({
     ...dataToInsert,
