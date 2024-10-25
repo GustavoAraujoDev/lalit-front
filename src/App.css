@@ -1,0 +1,64 @@
+.App {
+  text-align: center;
+}
+
+
+
+/* Estilo básico do layout */
+.routes {
+  display: flex;          /* Usa flexbox para organizar o Sidebar e a página */
+  height: 100vh;          /* Ocupa toda a altura da viewport */
+}
+
+/* Sidebar com largura fixa */
+.sidebar {
+  flex-basis: 250px;      /* Largura fixa de 250px */
+  background-color: #f8f9fa; /* Cor de fundo clara para o sidebar */
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Sombra para o sidebar */
+  overflow-y: auto;       /* Permite rolagem no sidebar se o conteúdo for maior que a tela */
+}
+
+/* Conteúdo da página, que se adapta ao espaço disponível */
+.page-content {
+  flex-grow: 1;           /* O conteúdo da página ocupará o restante do espaço */
+  padding: 20px;
+  overflow-y: auto;       /* Permite rolagem no conteúdo se necessário */
+  background-color: #ffffff; /* Cor de fundo para o conteúdo principal */
+}
+
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
