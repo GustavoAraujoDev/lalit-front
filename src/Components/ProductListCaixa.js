@@ -32,7 +32,7 @@ const Caixa = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch("https://carmelisapi.onrender.com/Produtos");
+        const response = await fetch("https://lalitaapi.onrender.com/Produtos");
         if (!response.ok) throw new Error("Erro ao buscar produtos");
         const data = await response.json();
        // Converte o objeto de produtos em um array
@@ -51,7 +51,7 @@ const Caixa = () => {
 
     const fetchClients = async () => {
       try {
-        const response = await fetch("https://carmelisapi.onrender.com/Clientes");
+        const response = await fetch("https://lalitaapi.onrender.com/Clientes");
         if (!response.ok) throw new Error("Erro ao buscar Clientes");
         const data = await response.json();
        // Converte o objeto de produtos em um array
@@ -111,7 +111,7 @@ const Caixa = () => {
     });
     
     toast.isActive('Compra finalizada com Sucesso')
-    const response = await fetch("https://carmelisapi.onrender.com/Vendas", {
+    const response = await fetch("https://lalitaapi.onrender.com/Vendas", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -151,14 +151,14 @@ const Caixa = () => {
       const novaQuantidade = item.produto.Quantidade - quantidadeVendida;
 
       if(novaQuantidade === 0){
-        fetch(`https://carmelisapi.onrender.com/Produtos/${productid}`, {
+        fetch(`https://lalitaapi.onrender.com/Produtos/${productid}`, {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json"
           },
         })
       } else {
-     const response =  fetch(`https://carmelisapi.onrender.com/Produtos/${productid}`, {
+     const response =  fetch(`https://lalitaapi.onrender.com/Produtos/${productid}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json"
