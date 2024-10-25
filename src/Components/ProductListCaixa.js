@@ -145,40 +145,42 @@ const Caixa = () => {
   }
   };
   
-  const atualizarQuantidadeProdutos = async () => {
-    for (const item of carrinho) {
+  const atualizarQuantidadeProdutos = () => {
+    carrinho.forEach((item) => {
       const productid = item.produto.productid;
       const quantidadeVendida = item.quantidade;
       const novaQuantidade = item.produto.Quantidade - quantidadeVendida;
-  
-      try {
-        if (novaQuantidade <= 0) {
-          // Se a nova quantidade for menor ou igual a zero, exclua o produto
-          await axios.delete(`https://lalitaapi.onrender.com/Produtos/${productid}`);
-          toast.success('Produto excluído com sucesso');
-        } else {
-          // Atualiza o produto com a nova quantidade
-          const response = await axios.put(`https://lalitaapi.onrender.com/Produtos/${productid}`, {
-            nome: item.produto.nome,
-            descricao: item.produto.descricao,
-            preco: item.produto.preco,
-            precovenda: item.produto.precovenda,
-            quantidade: novaQuantidade
-          });
-  
-          console.log(response);
-          if (response.status === 200) {
-            toast.success('Produto atualizado com sucesso');
-            console.log(response.data);
-          }
-        }
-      } catch (error) {
-        toast.error('Erro ao atualizar produto');
-        console.error('Error:', error);
-      }
+
+      if(novaQuantidade === 0){
+        fetch(`https://lalitaapi.onrender.com/Produtos/${productid}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json"
+          },
+        })
+      } else {
+     const response =  fetch(`https://lalitaapi.onrender.com/Produtos/${productid}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        nome: item.produto.nome,
+        descricao: item.produto.descricao,
+        preco: item.produto.preco,
+        precovenda: item.produto.precovenda,
+        quantidade: novaQuantidade
+      })
+    })
+    console.log(response);
+    if (response.ok) {
+      toast.success('Produto atualizado com sucesso')
+      console.log(response);
     }
-  };
-  
+   }
+ });
+}
+
 const handleChange = (e) => {
   setDataToInsert({
     ...dataToInsert,
