@@ -165,6 +165,7 @@ const Caixa = () => {
         } else {
           const updateResponse = await fetch(`https://lalitaapi.onrender.com/Produtos/${productid}`, {
             method: 'PUT',
+            mode: 'no-cors',
             headers: {
               'Content-Type': 'application/json',
             },
