@@ -145,17 +145,19 @@ const Caixa = () => {
   }
   };
   
-  const atualizarQuantidadeProdutos = () => {
-    carrinho.forEach(async (item) => {
+  const atualizarQuantidadeProdutos = async () => {
+    for (const item of carrinho) {
       const productid = item.produto.productid;
       const quantidadeVendida = item.quantidade;
       const novaQuantidade = item.produto.Quantidade - quantidadeVendida;
   
       try {
-        if (novaQuantidade === 0) {
+        if (novaQuantidade <= 0) {
+          // Se a nova quantidade for menor ou igual a zero, exclua o produto
           await axios.delete(`https://lalitaapi.onrender.com/Produtos/${productid}`);
           toast.success('Produto excluído com sucesso');
         } else {
+          // Atualiza o produto com a nova quantidade
           const response = await axios.put(`https://lalitaapi.onrender.com/Produtos/${productid}`, {
             nome: item.produto.nome,
             descricao: item.produto.descricao,
@@ -163,6 +165,7 @@ const Caixa = () => {
             precovenda: item.produto.precovenda,
             quantidade: novaQuantidade
           });
+  
           console.log(response);
           if (response.status === 200) {
             toast.success('Produto atualizado com sucesso');
@@ -173,9 +176,9 @@ const Caixa = () => {
         toast.error('Erro ao atualizar produto');
         console.error('Error:', error);
       }
-    });
+    }
   };
-
+  
 const handleChange = (e) => {
   setDataToInsert({
     ...dataToInsert,
