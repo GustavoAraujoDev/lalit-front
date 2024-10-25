@@ -165,7 +165,6 @@ const Caixa = () => {
         } else {
           const updateResponse = await fetch(`http://localhost:6060/Produtos/${productid}`, {
             method: 'PUT',
-            mode: 'no-cors',
             headers: {
               'Content-Type': 'application/json',
             },
