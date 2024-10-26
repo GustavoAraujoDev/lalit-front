@@ -149,7 +149,7 @@ const Caixa = () => {
   const atualizarQuantidadeProdutos = async () => {
     for (const item of carrinho) {
       const productid = item.produto.productid;
-      const quantidadeVendida = item.quantidade;
+      const quantidadeVendida = item.Quantidade;
       const novaQuantidade = item.produto.Quantidade - quantidadeVendida;
        console.log(productid);
        console.log(novaQuantidade)
