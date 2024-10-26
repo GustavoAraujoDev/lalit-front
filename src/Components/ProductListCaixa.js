@@ -147,6 +147,7 @@ const Caixa = () => {
   };
   
   const atualizarQuantidadeProdutos = async () => {
+    console.table(carrinho)
     for (const item of carrinho) {
       const productid = item.produto.productid;
       const quantidadeVendida = item.Quantidade;
