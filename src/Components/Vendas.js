@@ -208,7 +208,7 @@ console.table(filteredSales);
                 <React.Fragment key={sale.Vendaid}>
                   <TableRow>
                     <TableCell>{sale.Vendaid}</TableCell>
-                    <TableCell>{new Date(sale.createdAt).toLocaleDateString()}</TableCell>
+                    <TableCell>{sale.createdAt ? new Date(sale.createdAt).toLocaleDateString() : "Data inválida"}</TableCell>
                     <TableCell>R$ {sale.totalprice}</TableCell>
                     <TableCell>
                       <IconButton aria-label="ver detalhes" onClick={() => toggleSaleDetails(sale)}>
