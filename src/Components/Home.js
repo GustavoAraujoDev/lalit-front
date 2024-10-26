@@ -69,15 +69,6 @@ function Home() {
             // Extrai o JSON de cada resposta
             const itensVendas = await Promise.all(respostasItensVendas.map(resposta => resposta.json()));
             console.log(itensVendas);
-
-            // Agora, vamos obter também a forma de pagamento das vendas
-            const promessasVendas = idsvendas.map(Vendaid => fetch(`https://lalitaapi.onrender.com/Vendas/${Vendaid}`));
-            const respostasVendas = await Promise.all(promessasVendas);
-            const dadosVendas = await Promise.all(respostasVendas.map(resposta => resposta.json()));
-
-            // Cria um mapa de vendas para acesso mais fácil
-const mapaVendas = Object.fromEntries(dadosVendas.map(venda => [venda.Vendaid, venda]));
-
             
             // Converte `itensVendas` em um array plano, assumindo que cada resposta pode ser um array de produtos
             const itensVendasArrays = itensVendas.flatMap(itensVenda => 
@@ -97,23 +88,11 @@ const mapaVendas = Object.fromEntries(dadosVendas.map(venda => [venda.Vendaid, v
                 // Verifica se quantidade é um número, se não, converte para número
                 const quantidadeNumerica = typeof quantidade === 'number' ? quantidade : Number(quantidade);
             
-    // Acesse a forma de pagamento da venda correspondente usando o ID da venda
-    const formaPagamento = mapaVendas[produto.Vendaid]?.pagamento; // Acesso ao objeto de venda correspondente
-    console.log(formaPagamento)
                 // Verifica se as variáveis são números
                 if (typeof quantidadeNumerica === 'number' && typeof precovenda === 'number' && typeof preco === 'number') {
                     // Calcula o lucro apenas se a quantidade for maior que 0
                     if (quantidadeNumerica > 0) {
-                        let lucroItem = quantidadeNumerica * (precovenda - preco);
-        
-                        // Verifica a forma de pagamento
-                        if (formaPagamento === 'CARTAO DE CREDITO') { // Supondo que 'cartao' é a forma de pagamento
-                            const taxaCartao = 0.0; // Exemplo de taxa de 5%
-                            lucroItem -= lucroItem * taxaCartao; // Aplica o desconto
-                            console.log(`Aplicando desconto: ${lucroItem}`);
-                        }
-                
-                        return total + lucroItem;
+                        return total + (quantidadeNumerica * (precovenda - preco));
                     } else {
                         console.warn("Quantidade inválida para produto:", produto);
                         return total; // Ignora este produto se a quantidade for inválida
