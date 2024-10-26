@@ -170,7 +170,7 @@ const Caixa = () => {
           if (!deleteResponse.ok) throw new Error('Erro ao deletar produto');
           console.log(`Produto ${productid} deletado com sucesso`);
         } else {
-          const updateResponse = await fetch(`http://localhost:6060/Produtos/${productid}`, {
+          const updateResponse = await fetch(`http://lalitaapi.onrender.com/Produtos/${productid}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
