@@ -184,7 +184,7 @@ console.table(filteredSales);
             />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <Button variant="contained" style={{ color: '#f5d6a8', backgroundColor: '#fff'}} onClick={handleFilter}>Filtrar</Button>
+            <Button variant="contained" style={{ color: '#fff', backgroundColor: '#f5d6a8'}} onClick={handleFilter}>Filtrar</Button>
             {filterloading && (
             <IconButton aria-label="excluir" onClick={clearFilter}>
               <Typography variant="body1">Desfazer Filtragem</Typography>
@@ -208,7 +208,7 @@ console.table(filteredSales);
                 <React.Fragment key={sale.Vendaid}>
                   <TableRow>
                     <TableCell>{sale.Vendaid}</TableCell>
-                    <TableCell>{new Date(sale.createdAt).toLocaleDateString()}</TableCell>
+                    <TableCell>{sale.createdAt.toLocaleDateString()}</TableCell>
                     <TableCell>R$ {sale.totalprice}</TableCell>
                     <TableCell>
                       <IconButton aria-label="ver detalhes" onClick={() => toggleSaleDetails(sale)}>
