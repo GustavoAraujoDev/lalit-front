@@ -150,9 +150,10 @@ const Caixa = () => {
     console.table(carrinho)
     for (const item of carrinho) {
       const productid = item.produto.productid;
-      const quantidadeVendida = item.Quantidade;
-      const novaQuantidade = item.produto.quantidade - quantidadeVendida;
+      const quantidadeVendida = item.quantidade;
+      const novaQuantidade = Number(item.produto.quantidade) - quantidadeVendida;
        console.log(productid);
+       console.log(quantidadeVendida);
        console.log(novaQuantidade)
        console.log(item.produto.nome)
        console.log(item.produto.preco)
