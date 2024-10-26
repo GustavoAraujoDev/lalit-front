@@ -62,7 +62,8 @@ function Home() {
             const respostasItensVendas = await Promise.all(promessasItensVendas);
             console.log(respostasItensVendas);
             const itensVendas = await Promise.all(respostasItensVendas.map(resposta => resposta.json()));
-            const LucroTotal = itensVendas.reduce((total, itensVenda) => {
+            console.log(itensVendas);
+            const LucroTotal = Object.values(itensVendas).reduce((total, itensVenda) => {
                 const lucroItensVenda = itensVenda.reduce((totalItem, produto) => {
                     return totalItem + (produto.quantidade * (produto.precovenda - produto.preco));
                 }, 0);
@@ -70,7 +71,7 @@ function Home() {
             }, 0);
             setLucroTotal(LucroTotal);
         
-            setLoading(false);
+            setLoading(false);it
         } catch (error) {
             console.error(error);
             setLoading(false);
