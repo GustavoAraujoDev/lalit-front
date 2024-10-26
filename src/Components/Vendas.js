@@ -163,7 +163,7 @@ console.table(filteredSales);
   };
 
   return (
-    <Grid container justifyContent="center" style={{ minHeight: '100vh', marginTop: '0px', backgroundColor: '#c7c7c6', color: '#c0844a' }}>
+    <Grid container justifyContent="center" style={{ minHeight: '100vh', marginTop: '0px', backgroundColor: '#fff', color: '#f5d6a8' }}>
       <Grid item xs={12} md={10} lg={8}>
         <h1 style={{ textAlign: 'center' }}>Lista de Vendas</h1>
         <Grid container spacing={2} justifyContent="center" sx={{ flexDirection: 'column', textAlign: 'center' }}>
@@ -184,7 +184,7 @@ console.table(filteredSales);
             />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <Button variant="contained" style={{ color: '#c0844a', backgroundColor: '#0a2e18'}} onClick={handleFilter}>Filtrar</Button>
+            <Button variant="contained" style={{ color: '#f5d6a8', backgroundColor: '#fff'}} onClick={handleFilter}>Filtrar</Button>
             {filterloading && (
             <IconButton aria-label="excluir" onClick={clearFilter}>
               <Typography variant="body1">Desfazer Filtragem</Typography>
@@ -242,6 +242,7 @@ console.table(filteredSales);
                             {sale.situacao === 'Pendente' && (
                               <IconButton onClick={() => updateSaleStatus(sale.Vendaid)}>
                                 <DoneIcon />
+                                TextField
                               </IconButton>
                             )}
                           </li>
