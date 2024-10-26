@@ -57,21 +57,56 @@ function Home() {
             setProdutosTotal(produtosTotal);
             
             const idsvendas = Object.values(vendasData).map(venda => venda.Vendaid);
-            const promessasItensVendas = idsvendas.map(id => fetch(`https://lalitaapi.onrender.com/Vendas/itens/${id}`));
+
+            // Realiza as requisições para cada item da venda usando o ID da venda
+            const promessasItensVendas = idsvendas.map(Vendaid => fetch(`https://lalitaapi.onrender.com/Vendas/itens/${Vendaid}`));
             console.log(promessasItensVendas);
+            
+            // Aguarda todas as requisições serem concluídas
             const respostasItensVendas = await Promise.all(promessasItensVendas);
             console.log(respostasItensVendas);
+            
+            // Extrai o JSON de cada resposta
             const itensVendas = await Promise.all(respostasItensVendas.map(resposta => resposta.json()));
             console.log(itensVendas);
-            const LucroTotal = Object.values(itensVendas).reduce((total, itensVenda) => {
-                const lucroItensVenda = itensVenda.reduce((totalItem, produto) => {
-                    return totalItem + (produto.quantidade * (produto.precovenda - produto.preco));
-                }, 0);
-                return total + lucroItensVenda;
+            
+            // Converte `itensVendas` em um array plano, assumindo que cada resposta pode ser um array de produtos
+            const itensVendasArrays = itensVendas.flatMap(itensVenda => 
+                Array.isArray(itensVenda) ? itensVenda : Object.values(itensVenda) // Altera aqui para usar Object.values
+            );
+            
+            // Calcula o lucro total
+            const LucroTotal = itensVendasArrays.reduce((total, produto) => {
+                // Log do produto para diagnóstico
+                console.log("Produto recebido:", produto);
+            
+                // Acessa os campos corretamente
+                const quantidade = produto.quantidade !== undefined ? produto.quantidade : 0; // Verifica se quantidade existe
+                const precovenda = produto.precovenda !== undefined ? produto.precovenda : 0; // Verifica se precovenda existe
+                const preco = produto.preco !== undefined ? produto.preco : 0; // Verifica se preco existe
+            
+                // Verifica se quantidade é um número, se não, converte para número
+                const quantidadeNumerica = typeof quantidade === 'number' ? quantidade : Number(quantidade);
+            
+                // Verifica se as variáveis são números
+                if (typeof quantidadeNumerica === 'number' && typeof precovenda === 'number' && typeof preco === 'number') {
+                    // Calcula o lucro apenas se a quantidade for maior que 0
+                    if (quantidadeNumerica > 0) {
+                        return total + (quantidadeNumerica * (precovenda - preco));
+                    } else {
+                        console.warn("Quantidade inválida para produto:", produto);
+                        return total; // Ignora este produto se a quantidade for inválida
+                    }
+                } else {
+                    console.warn("Dados inválidos para produto:", produto);
+                    return total; // Ignora este produto se os dados forem inválidos
+                }
             }, 0);
+            
+            // Atualiza o estado com o lucro total
             setLucroTotal(LucroTotal);
-        
             setLoading(false);
+            
         } catch (error) {
             console.error(error);
             setLoading(false);
