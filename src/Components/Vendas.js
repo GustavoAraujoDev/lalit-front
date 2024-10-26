@@ -42,6 +42,7 @@ function SalesPage() {
   };
   
 console.table(filteredSales);
+console.table(ItensSales);
 
   const fetchSales = () => {
       fetch("https://lalitaapi.onrender.com/Vendas")
@@ -85,6 +86,7 @@ console.table(filteredSales);
 
   const handleDelete = (id) => {
     setVendaid(id);
+  console.log(Vendaid)
     setOpenDeleteDialog(true);
   };
 
