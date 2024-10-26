@@ -151,7 +151,12 @@ const Caixa = () => {
       const productid = item.produto.productid;
       const quantidadeVendida = item.quantidade;
       const novaQuantidade = item.produto.Quantidade - quantidadeVendida;
-
+       console.log(productid);
+       console.log(novaQuantidade)
+       console.log(item.produto.nome)
+       console.log(item.produto.preco)
+       console.log(item.produto.precovenda)
+       console.log(item.produto.descricao)
       try {
         if (novaQuantidade <= 0) {
           const deleteResponse = await fetch(`https://lalitaapi.onrender.com/Produtos/${productid}`, {
@@ -163,7 +168,7 @@ const Caixa = () => {
           if (!deleteResponse.ok) throw new Error('Erro ao deletar produto');
           console.log(`Produto ${productid} deletado com sucesso`);
         } else {
-          const updateResponse = await fetch(`http://localhost:6060/Produtos/${productid}`, {
+          const updateResponse = await fetch(`https://lalitaapi.onrender.com/Produtos/${productid}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
