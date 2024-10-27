@@ -218,8 +218,7 @@ function ProductsPage() {
     if (
       parseFloat(dataToInsert.preco) <= 0 ||
       (dataToInsert.quantidade && parseInt(dataToInsert.quantidade) <= 0) ||
-      (dataToInsert.precovenda && parseFloat(dataToInsert.precovenda) <= 0) ||
-      (dataToInsert.precocombo && parseFloat(dataToInsert.precocombo) <= 0)
+      (dataToInsert.precovenda && parseFloat(dataToInsert.precovenda) <= 0) 
     ) {
       toast.error("Por favor, insira valores positivos.");
       return;
