@@ -270,14 +270,14 @@ const Caixa = () => {
   };
 
   const calcularTotal = () => {
-    if (dataToInsert.pagamento === "CARTAO DE CREDITO") {
+    if (dataToInsert.pagamento === "cartaodecredito") {
       return carrinho.reduce(
         (total, item) =>
           total + parseFloat(item.produto.precovenda) * item.quantidade,
         0
       );
     }
-    if (dataToInsert.pagamento === "DINHEIRO" || dataToInsert.pagamento === "PIX") {
+    if (dataToInsert.pagamento === "dinheiro" || dataToInsert.pagamento === "pix") {
       setDesconto(6)
       return carrinho.reduce(
         (total, item) =>
@@ -285,7 +285,7 @@ const Caixa = () => {
         0
       );
     }
-     if (dataToInsert.combo === "COMBO") {
+     if (dataToInsert.combo === "combo") {
       return carrinho.reduce(
         (total, item) =>
           total + parseFloat(item.produto.precocombo) * item.quantidade,
@@ -461,6 +461,24 @@ const Caixa = () => {
                   </Select>
                 </label>
                 <RadioGroup
+                  name="combo"
+                  value={dataToInsert.combo}
+                  onChange={handleChange}
+                  row
+                  style={{ color: "#c0844a" }}
+                >
+                  <FormControlLabel
+                    value="combo"
+                    control={<Radio />}
+                    label="COMBO"
+                  />
+                  <FormControlLabel
+                    value="naocombo"
+                    control={<Radio />}
+                    label="NÃO COMBO"
+                  />
+                </RadioGroup>
+                <RadioGroup
                   name="pagamento"
                   value={dataToInsert.pagamento}
                   onChange={handleChange}
@@ -468,17 +486,17 @@ const Caixa = () => {
                   style={{ color: "#c0844a" }}
                 >
                   <FormControlLabel
-                    value="PIX"
+                    value="pix"
                     control={<Radio />}
                     label="PIX"
                   />
                   <FormControlLabel
-                    value="DINHEIRO"
+                    value="dinheiro"
                     control={<Radio />}
                     label="DINHEIRO"
                   />
                   <FormControlLabel
-                    value="CARTAO DE CREDITO"
+                    value="cartaodecredito"
                     control={<Radio />}
                     label="CARTÃO DE CREDITO"
                   />
