@@ -39,6 +39,7 @@ const Caixa = () => {
     combo: "",
   });
   const [selectedClient, setSelectedClient] = useState("");
+  onsole.log(selectedClient)
 
   const clearForm = () => {
     setDataToInsert({
@@ -338,7 +339,7 @@ const Caixa = () => {
                       secondary={
                         <Typography>
                           {`R$ ${produto.precovenda}`} -
-                          {`R$ ${produto.precocombo}`}
+                           {`R$ ${produto.precocombo}`}
                         </Typography>
                       }
                     />
