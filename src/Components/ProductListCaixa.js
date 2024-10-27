@@ -279,17 +279,21 @@ const Caixa = () => {
         ? parseFloat(item.produto.precocombo) 
         : parseFloat(item.produto.precovenda);
   
-      // Aplicar desconto de 6% para pagamentos em PIX ou dinheiro
-      if (dataToInsert.pagamento === "pix" || dataToInsert.pagamento === "dinheiro") {
-        total += preco * item.quantidade * 0.94; // 6% de desconto
+      // Para combos, não aplica desconto
+      if (dataToInsert.combo === "combo") {
+        total += preco * item.quantidade; // Preço normal para combo
       } else {
-        total += preco * item.quantidade; // Preço normal
+        // Aplicar desconto de 6% para pagamentos em PIX ou dinheiro
+        if (dataToInsert.pagamento === "pix" || dataToInsert.pagamento === "dinheiro") {
+          total += preco * item.quantidade * 0.94; // 6% de desconto
+        } else {
+          total += preco * item.quantidade; // Preço normal para outros pagamentos
+        }
       }
     });
   
     return total;
   };
-  
 
   const filtrarProdutos = () => {
     return produtos.filter((produto) =>
