@@ -132,7 +132,7 @@ const Caixa = () => {
       items: items,
     });
 
-    toast.isActive("Compra finalizada com Sucesso");
+    toast.success("Compra finalizada com Sucesso");
     const response = await fetch("https://lalitaapi.onrender.com/Vendas", {
       method: "POST",
       headers: {
@@ -153,7 +153,7 @@ const Caixa = () => {
         const data = await response.json();
         console.log("Venda finalizada com sucesso:", data);
         atualizarQuantidadeProdutos();
-        toast.isActive("Venda Realizada Com Sucesso!!");
+        toast.success("Venda Realizada Com Sucesso!!");
         // Limpar carrinho após finalizar a venda
         setCarrinho([]);
         // Habilitar todos os produtos novamente
@@ -460,25 +460,6 @@ const Caixa = () => {
                     ))}
                   </Select>
                 </label>
-                <RadioGroup
-                  name="combo"
-                  value={dataToInsert.combo}
-                  onChange={handleChange}
-                  row
-                  style={{ color: "#c0844a" }}
-                >
-                  <FormControlLabel
-                    value="COMBO"
-                    control={<Radio />}
-                    label="COMBO"
-                  />
-                  <FormControlLabel
-                    value="NAO COMBO"
-                    control={<Radio />}
-                    label="NÃO COMBO"
-                  />
-                 
-                </RadioGroup>
                 <RadioGroup
                   name="pagamento"
                   value={dataToInsert.pagamento}
