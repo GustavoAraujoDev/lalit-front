@@ -332,12 +332,12 @@ const Caixa = () => {
                       primaryTypographyProps={{ style: { color: "black" } }}
                       primary={
                         <Typography>
-                          {produto.productid} - {produto.nome}
+                         {produto.nome}
                         </Typography>
                       }
                       secondary={
                         <Typography>
-                          {`R$ ${produto.precovenda}`} -{" "}
+                          {`R$ ${produto.precovenda}`} -
                           {`R$ ${produto.precocombo}`}
                         </Typography>
                       }
