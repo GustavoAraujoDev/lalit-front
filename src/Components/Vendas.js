@@ -16,6 +16,8 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { Button, Grid, Typography, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import DoneIcon from '@mui/icons-material/Done';
+import { ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function SalesPage() {
   const [sales, setSales] = useState([]);
@@ -26,7 +28,6 @@ function SalesPage() {
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [Vendaid, setVendaid] = useState(null);
   const [openUpdateDialog, setOpenUpdateDialog] = useState(false);
-  const [saleIdToUpdate, setSaleIdToUpdate] = useState(null);
   const [filteredSales, setFilteredSales] = useState([]);
   const [filterloading, setFilterloading] = useState(false);
   useEffect(() => {
@@ -63,17 +64,16 @@ console.table(ItensSales);
   };
 
   const updateSaleStatus = (id) => {
-    setSaleIdToUpdate(id);
+    setVendaid(id);
     setOpenUpdateDialog(true);
   };
 
   const handleUpdateConfirmed = () => {
     setOpenUpdateDialog(false);
-    fetch("https://lalitaapi.onrender.com/Vendas", {
+    fetch(`https://lalitaapi.onrender.com/Vendas/${Vendaid}`, {
       method: "PUT",
       body: JSON.stringify({
-        Vendaid: saleIdToUpdate,
-        situacao: 'Concluída'
+        situacao: 'Concluida'
       }),
       headers: { "Content-Type": "application/json" },
     }).then(() => {
@@ -165,6 +165,7 @@ console.table(ItensSales);
   };
 
   return (
+    <>
     <Grid container justifyContent="center" style={{ minHeight: '100vh', marginTop: '0px', backgroundColor: '#fff', color: '#f5d6a8' }}>
       <Grid item xs={12} md={10} lg={8}>
         <h1 style={{ textAlign: 'center' }}>Lista de Vendas</h1>
@@ -245,7 +246,6 @@ console.table(ItensSales);
                             {sale.situacao === 'Pendente' && (
                               <IconButton onClick={() => updateSaleStatus(sale.Vendaid)}>
                                 <DoneIcon />
-                                TextField
                               </IconButton>
                             )}
                           </li>
@@ -294,6 +294,8 @@ console.table(ItensSales);
         </Dialog>
       </Grid>
     </Grid>
+    <ToastContainer/>
+    </>
   );
 }
 
