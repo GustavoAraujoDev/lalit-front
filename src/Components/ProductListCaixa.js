@@ -273,11 +273,11 @@ const Caixa = () => {
     if (dataToInsert.pagamento === "CARTAO DE CREDITO") {
       return carrinho.reduce(
         (total, item) =>
-          total + parseFloat(item.produto.precovenda) * item.quantidade * 0.94,
+          total + parseFloat(item.produto.precovenda) * item.quantidade,
         0
       );
     }
-    if (dataToInsert.pagamento === "DINHEIRO" || "PIX") {
+    if (dataToInsert.pagamento === "DINHEIRO" || dataToInsert.pagamento === "PIX") {
       setDesconto(6)
       return carrinho.reduce(
         (total, item) =>
