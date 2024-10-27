@@ -272,25 +272,28 @@ const Caixa = () => {
   };
 
   const calcularTotal = () => {
-    if (dataToInsert.pagamento === "pix" || dataToInsert.pagamento === "dinheiro") {
-      return carrinho.reduce(
-        (total, item) =>
-          total + parseFloat(item.produto.precovenda) * item.quantidade * 0.94,
-        0
-      );
-    } 
-    if (dataToInsert.combo === "combo") {
+     if (dataToInsert.combo === "combo") {
+     if (dataToInsert.pagamento === "pix" || dataToInsert.pagamento === "dinheiro") {
       return carrinho.reduce(
         (total, item) =>
           total + parseFloat(item.produto.precocombo) * item.quantidade,
         0
       );
+    } 
     } else {
-      return carrinho.reduce(
-        (total, item) =>
-          total + parseFloat(item.produto.precovenda) * item.quantidade,
-        0
-      );
+      if (dataToInsert.pagamento === "pix" || dataToInsert.pagamento === "dinheiro") {
+        return carrinho.reduce(
+          (total, item) =>
+            total + parseFloat(item.produto.precovenda) * item.quantidade * 0.94,
+          0
+        );
+      } else {
+        return carrinho.reduce(
+          (total, item) =>
+            total + parseFloat(item.produto.precovenda) * item.quantidade,
+          0
+        );
+     }
     }
   };
 
