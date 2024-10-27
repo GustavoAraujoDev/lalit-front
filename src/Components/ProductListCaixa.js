@@ -435,7 +435,7 @@ const Caixa = () => {
                       <MenuItem
                         style={{ color: "#c0844a" }}
                         key={cliente.clientid}
-                        value={cliente.clientid}
+                        value={cliente.nome}
                       >
                         {cliente.nome}
                       </MenuItem>
