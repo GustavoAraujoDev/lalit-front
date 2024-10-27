@@ -33,9 +33,11 @@ const Caixa = () => {
   const [produtosSelecionados, setProdutosSelecionados] = useState({});
   const [filtroNome, setFiltroNome] = useState("");
   const [Quantidade, setQuantidade] = useState(0);
+  const [desconto, setDesconto] = useState(0);
   const [dataToInsert, setDataToInsert] = useState({
     situacao: "",
     pagamento: "",
+    combo: "",
   });
   const [selectedClient, setSelectedClient] = useState("");
 
@@ -43,6 +45,7 @@ const Caixa = () => {
     setDataToInsert({
       situacao: "",
       pagamento: "",
+      combo: "",
     });
   };
 
@@ -123,6 +126,7 @@ const Caixa = () => {
       totalprice: totalPrice,
       pagamento: dataToInsert.pagamento,
       situacao: dataToInsert.situacao,
+      combo: dataToInsert.combo,
       productids: productIds,
       clienteid: selectedClient,
       items: items,
@@ -272,6 +276,21 @@ const Caixa = () => {
           total + parseFloat(item.produto.precovenda) * item.quantidade * 0.94,
         0
       );
+    }
+    if (dataToInsert.pagamento === "DINHEIRO" || "PIX") {
+      setDesconto(6)
+      return carrinho.reduce(
+        (total, item) =>
+          total + parseFloat(item.produto.precovenda) * item.quantidade * 0.94,
+        0
+      );
+    }
+     if (dataToInsert.combo === "COMBO") {
+      return carrinho.reduce(
+        (total, item) =>
+          total + parseFloat(item.produto.precocombo) * item.quantidade,
+        0
+      );
     } else {
       return carrinho.reduce(
         (total, item) =>
@@ -335,7 +354,11 @@ const Caixa = () => {
                           {produto.productid} - {produto.nome}
                         </Typography>
                       }
-                      secondary={`R$ ${produto.precovenda}`}
+                      secondary={
+                        <Typography>
+                          {`R$ ${produto.precovenda}`} - {`R$ ${produto.precocombo}`}
+                        </Typography>
+                      }
                     />
                     <Select
                       label="Quantidade"
@@ -415,7 +438,7 @@ const Caixa = () => {
                 <Typography style={{ color: "#c0844a" }} variant="subtitle1">
                   Valor Total R$ {calcularTotal().toFixed(2)}
                 </Typography>
-                <Typography>{selectedClient}</Typography>
+                <Typography> {`${desconto} %`}</Typography>
                 <label style={{ color: "#c0844a" }}>
                   Selecione o Cliente
                   <Select
@@ -437,6 +460,25 @@ const Caixa = () => {
                     ))}
                   </Select>
                 </label>
+                <RadioGroup
+                  name="combo"
+                  value={dataToInsert.combo}
+                  onChange={handleChange}
+                  row
+                  style={{ color: "#c0844a" }}
+                >
+                  <FormControlLabel
+                    value="COMBO"
+                    control={<Radio />}
+                    label="COMBO"
+                  />
+                  <FormControlLabel
+                    value="NAO COMBO"
+                    control={<Radio />}
+                    label="NÃO COMBO"
+                  />
+                 
+                </RadioGroup>
                 <RadioGroup
                   name="pagamento"
                   value={dataToInsert.pagamento}

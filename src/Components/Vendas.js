@@ -241,6 +241,7 @@ console.table(ItensSales);
                             <p>Pagamento: {sale.pagamento}</p>
                             <p>Situação: {sale.situacao}</p>
                             <p>Cliente: {sale.clientid}</p>
+                            <p>Combo: {sale.combo}</p>
                             {sale.situacao === 'Pendente' && (
                               <IconButton onClick={() => updateSaleStatus(sale.Vendaid)}>
                                 <DoneIcon />

@@ -35,6 +35,7 @@ function ProductsPage() {
     descricao: "",
     preco: "",
     precovenda: "",
+    precocombo: "",
     quantidade: "",
   });
   const [productid, setProductid] = useState(null);
@@ -189,13 +190,13 @@ function ProductsPage() {
     }
 
     // Validação de formato
-    if (isNaN(dataToInsert.preco) || (dataToInsert.precovenda && isNaN(dataToInsert.precovenda)) || (dataToInsert.quantidade && isNaN(dataToInsert.quantidade))) {
+    if (isNaN(dataToInsert.preco) || (dataToInsert.precovenda && isNaN(dataToInsert.precovenda)) || (dataToInsert.precocombo && isNaN(dataToInsert.precocombo)) || (dataToInsert.quantidade && isNaN(dataToInsert.quantidade))) {
       toast.error('Por favor, insira valores numéricos válidos.');
       return;
     }
 
     // Validação de valores
-    if (parseFloat(dataToInsert.preco) <= 0 || (dataToInsert.quantidade && parseInt(dataToInsert.quantidade) <= 0) || (dataToInsert.precovenda && parseFloat(dataToInsert.precovenda) <= 0)) {
+    if (parseFloat(dataToInsert.preco) <= 0 || (dataToInsert.quantidade && parseInt(dataToInsert.quantidade) <= 0) || (dataToInsert.precovenda && parseFloat(dataToInsert.precovenda) <= 0) || (dataToInsert.precocombo && parseFloat(dataToInsert.precocombo) <= 0)) {
       toast.error('Por favor, insira valores positivos.');
       return;
     }
@@ -258,6 +259,7 @@ function ProductsPage() {
                   <TableCell>Descrição</TableCell>
                   <TableCell>Preço</TableCell>
                   <TableCell>Preço de Venda</TableCell>
+                  <TableCell>Preço de Combo</TableCell>
                   <TableCell>Quantidade</TableCell>
                   <TableCell>Codigo de Barra</TableCell>
                   <TableCell>Ações</TableCell>
@@ -272,6 +274,7 @@ function ProductsPage() {
                         <TableCell>{product.descricao}</TableCell>
                         <TableCell>R$ {parseFloat(product.preco).toFixed(2)}</TableCell>
                         <TableCell>R$ {parseFloat(product.precovenda).toFixed(2)}</TableCell>
+                        <TableCell>R$ {parseFloat(product.precocombo).toFixed(2)}</TableCell>
                         <TableCell>{product.quantidade}</TableCell>
                         <TableCell >
                   {/* Código de barras oculto */}
@@ -323,6 +326,14 @@ function ProductsPage() {
                 name="preco"
                 label="Preço"
                 value={dataToInsert.preco}
+                onChange={handleChange}
+                fullWidth
+                margin="normal"
+              />
+              <TextField
+                name="precocombo"
+                label="Preço de Combo"
+                value={dataToInsert.precocombo}
                 onChange={handleChange}
                 fullWidth
                 margin="normal"
