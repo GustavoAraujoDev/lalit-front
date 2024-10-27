@@ -142,6 +142,7 @@ const Caixa = () => {
         totalprice: totalPrice,
         pagamento: dataToInsert.pagamento,
         situacao: dataToInsert.situacao,
+        combo: dataToInsert.combo,
         productids: productIds,
         clientid: selectedClient,
         items: items,
@@ -271,13 +272,6 @@ const Caixa = () => {
   };
 
   const calcularTotal = () => {
-    if (dataToInsert.pagamento === "cartaodecredito") {
-      return carrinho.reduce(
-        (total, item) =>
-          total + parseFloat(item.produto.precovenda) * item.quantidade,
-        0
-      );
-    }
     if (dataToInsert.pagamento === "pix") {
       setDesconto(6)
       return carrinho.reduce(
@@ -285,16 +279,20 @@ const Caixa = () => {
           total + parseFloat(item.produto.precovenda) * item.quantidade * 0.94,
         0
       );
-    }
-    if (dataToInsert.pagamento === "dinheiro") {
+    } else if (dataToInsert.pagamento === "dinheiro") {
       setDesconto(6)
       return carrinho.reduce(
         (total, item) =>
           total + parseFloat(item.produto.precovenda) * item.quantidade * 0.94,
         0
       );
-    }
-     if (dataToInsert.combo === "combo") {
+    } else if (dataToInsert.pagamento === "cartaodecredito") {
+      return carrinho.reduce(
+        (total, item) =>
+          total + parseFloat(item.produto.precovenda) * item.quantidade,
+        0
+      );
+    } else if (dataToInsert.combo === "combo") {
       return carrinho.reduce(
         (total, item) =>
           total + parseFloat(item.produto.precocombo) * item.quantidade,
