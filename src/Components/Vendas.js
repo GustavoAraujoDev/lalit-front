@@ -212,7 +212,7 @@ console.table(ItensSales);
                   <TableRow>
                     <TableCell>{sale.Vendaid}</TableCell>
                     <TableCell>{sale.createdAt ? new Date(sale.createdAt).toLocaleDateString() : "Data inválida"}</TableCell>
-                    <TableCell>R$ {sale.totalprice}</TableCell>
+                    <TableCell>R$ {parseFloat(sale.totalprice).toFixed(2)}</TableCell>
                     <TableCell>
                       <IconButton aria-label="ver detalhes" onClick={() => toggleSaleDetails(sale)}>
                         <VisibilityIcon />
