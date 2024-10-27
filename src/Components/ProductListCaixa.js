@@ -469,13 +469,13 @@ const Caixa = () => {
                     value="combo"
                     control={<Radio />}
                     label="COMBO"
-                    disabled={!dataToInsert.pagamento}
+                   
                   />
                   <FormControlLabel
                     value="naocombo"
                     control={<Radio />}
                     label="NÃO COMBO"
-                    disabled={!dataToInsert.pagamento}
+                    
                   />
                 </RadioGroup>
                 <RadioGroup
