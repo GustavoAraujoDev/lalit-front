@@ -105,7 +105,11 @@ const Caixa = () => {
       };
     });
 
+    console.log(items);
+    console.log(dataToInsert)
+
     const totalPrice = calcularTotal();
+    console.log(totalPrice)
     if (carrinho.length === 0) {
       toast.error("Selecione um produto antes de finalizar a compra");
       return;
@@ -130,7 +134,7 @@ const Caixa = () => {
     }
 
     const productIds = items.map((item) => item.productid);
-
+    console.log(productIds)
     const response = await fetch("https://lalitaapi.onrender.com/Vendas", {
       method: "POST",
       headers: {
