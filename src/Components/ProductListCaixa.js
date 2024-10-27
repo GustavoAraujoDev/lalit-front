@@ -207,6 +207,7 @@ const Caixa = () => {
                 descricao: item.produto.descricao,
                 preco: item.produto.preco,
                 precovenda: item.produto.precovenda,
+                precocombo: item.produto.precocombo,
                 quantidade: novaQuantidade,
               }),
             }
@@ -277,7 +278,15 @@ const Caixa = () => {
         0
       );
     }
-    if (dataToInsert.pagamento === "dinheiro" || dataToInsert.pagamento === "pix") {
+    if (dataToInsert.pagamento === "pix") {
+      setDesconto(6)
+      return carrinho.reduce(
+        (total, item) =>
+          total + parseFloat(item.produto.precovenda) * item.quantidade * 0.94,
+        0
+      );
+    }
+    if (dataToInsert.pagamento === "dinheiro") {
       setDesconto(6)
       return carrinho.reduce(
         (total, item) =>
