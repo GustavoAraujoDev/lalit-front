@@ -272,31 +272,24 @@ const Caixa = () => {
   };
 
   const calcularTotal = () => {
-     if (dataToInsert.combo === "combo") {
-     if (dataToInsert.pagamento === "pix" || dataToInsert.pagamento === "dinheiro" || dataToInsert.pagamento === "cartaodecredito") {
-      return carrinho.reduce(
-        (total, item) =>
-          total + parseFloat(item.produto.precocombo) * item.quantidade,
-        0
-      );
-    } 
-    } else {
+    let total = 0;
+  
+    carrinho.forEach((item) => {
+      const preco = dataToInsert.combo === "combo" 
+        ? parseFloat(item.produto.precocombo) 
+        : parseFloat(item.produto.precovenda);
+  
+      // Aplicar desconto de 6% para pagamentos em PIX ou dinheiro
       if (dataToInsert.pagamento === "pix" || dataToInsert.pagamento === "dinheiro") {
-        return carrinho.reduce(
-          (total, item) =>
-            total + parseFloat(item.produto.precovenda) * item.quantidade * 0.94,
-          0
-        );
-      } 
-      if (dataToInsert.pagamento === "cartaodecredito") {
-        return carrinho.reduce(
-          (total, item) =>
-            total + parseFloat(item.produto.precovenda) * item.quantidade,
-          0
-        );
-     }
-    }
+        total += preco * item.quantidade * 0.94; // 6% de desconto
+      } else {
+        total += preco * item.quantidade; // Preço normal
+      }
+    });
+  
+    return total;
   };
+  
 
   const filtrarProdutos = () => {
     return produtos.filter((produto) =>
