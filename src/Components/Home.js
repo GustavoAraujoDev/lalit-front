@@ -38,9 +38,6 @@ function Home() {
                 Object.keys(vendasData).length,
                 Object.keys(produtosData).length
             ]);
-            console.log(clienteslength);
-            console.log(vendaslength);
-            console.log(produtosData);
             setClientesTotal(clienteslength);
             setVendasCount(vendaslength);
             setProdutosCount(produtoslength);
@@ -59,15 +56,12 @@ function Home() {
             const idsvendas = Object.values(vendasData).map(venda => venda.Vendaid);
             // Realiza as requisições para cada item da venda usando o ID da venda
             const promessasItensVendas = idsvendas.map(Vendaid => fetch(`https://lalitaapi.onrender.com/Vendas/itens/${Vendaid}`));
-            console.log(promessasItensVendas);
             
             // Aguarda todas as requisições serem concluídas
             const respostasItensVendas = await Promise.all(promessasItensVendas);
-            console.log(respostasItensVendas);
             
             // Extrai o JSON de cada resposta
             const itensVendas = await Promise.all(respostasItensVendas.map(resposta => resposta.json()));
-            console.log(itensVendas);
             
             // Converte `itensVendas` em um array plano, assumindo que cada resposta pode ser um array de produtos
             const itensVendasArrays = itensVendas.flatMap(itensVenda => 
@@ -77,7 +71,6 @@ function Home() {
             // Calcula o lucro total
             const LucroTotal = itensVendasArrays.reduce((total, produto) => {
                 // Log do produto para diagnóstico
-                console.log("Produto recebido:", produto);
             
                 // Acessa os campos corretamente
                 const quantidade = produto.quantidade !== undefined ? produto.quantidade : 0; // Verifica se quantidade existe
@@ -101,7 +94,7 @@ function Home() {
                     return total; // Ignora este produto se os dados forem inválidos
                 }
             }, 0);
-            
+
             // Atualiza o estado com o lucro total
             setLucroTotal(LucroTotal);
             setLoading(false);

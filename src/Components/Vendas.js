@@ -86,7 +86,6 @@ console.table(ItensSales);
 
   const handleDelete = (id) => {
     setVendaid(id);
-  console.log(Vendaid)
     setOpenDeleteDialog(true);
   };
 

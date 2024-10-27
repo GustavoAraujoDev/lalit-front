@@ -66,8 +66,6 @@ function ProductsPage() {
     fetchProducts();
   }, []);
 
-  console.log(products);
-
   const handleDownload = async (barcodeValue, productName, productDescription, productPrice, quantity) => {
     const pdf = new jsPDF({
       orientation: 'landscape', // Mude para 'landscape' (paisagem)
@@ -157,7 +155,6 @@ function ProductsPage() {
 
   const handleDelete = (id) => {
     setProductid(id);
-    console.log(productid);
     setOpenDeleteDialog(true);
   };
 
@@ -169,7 +166,6 @@ function ProductsPage() {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
       });
-      console.log(response);
       if (!response.ok) throw new Error('Erro ao excluir o produto');
 
       toast.success('Produto excluído com sucesso');

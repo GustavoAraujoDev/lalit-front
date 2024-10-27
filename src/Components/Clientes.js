@@ -50,7 +50,6 @@ function ClientsPage() {
     const fetchClients = async () => {
       try {
         const response = await fetch('https://lalitaapi.onrender.com/Clientes');
-        console.log(response);
         if (!response.ok) throw new Error("Erro ao buscar Clientes");
         const data = await response.json();
         console.table(data);
@@ -69,11 +68,8 @@ function ClientsPage() {
     fetchClients();
   }, []);
 
-  console.log(clients)
-  console.log(clientid);
   const handleDelete = (id) => {
     setclientid(id);
-    console.log(clientid);
     setOpenDeleteDialog(true);
   };
 
@@ -147,7 +143,6 @@ try {
     body: JSON.stringify(dataToInsert),
     headers: { "Content-Type": "application/json" },
   });
-  console.log(response);
   if (response.ok) {
     const data = await response.json();
     toast.success('Cliente cadastrado com sucesso');

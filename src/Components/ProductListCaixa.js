@@ -123,18 +123,7 @@ const Caixa = () => {
       return;
     }
 
-    console.log(items);
     const productIds = items.map((item) => item.productid);
-    console.log(totalPrice);
-    console.log({
-      totalprice: totalPrice,
-      pagamento: dataToInsert.pagamento,
-      situacao: dataToInsert.situacao,
-      combo: dataToInsert.combo,
-      productids: productIds,
-      clienteid: selectedClient,
-      items: items,
-    });
 
     toast.success("Compra finalizada com Sucesso");
     const response = await fetch("https://lalitaapi.onrender.com/Vendas", {
@@ -152,11 +141,9 @@ const Caixa = () => {
         items: items,
       }),
     });
-    console.log(response);
     if (response.ok) {
       try {
         const data = await response.json();
-        console.log("Venda finalizada com sucesso:", data);
         atualizarQuantidadeProdutos();
         toast.success("Venda Realizada Com Sucesso!!");
         // Limpar carrinho após finalizar a venda
@@ -164,7 +151,6 @@ const Caixa = () => {
         // Habilitar todos os produtos novamente
         setProdutosSelecionados({});
         clearForm();
-        console.log(selectedClient);
       } catch (error) {
         console.error("Erro ao finalizar a venda:", error);
       }
@@ -178,13 +164,6 @@ const Caixa = () => {
       const quantidadeVendida = item.quantidade;
       const novaQuantidade =
         Number(item.produto.quantidade) - quantidadeVendida;
-      console.log(productid);
-      console.log(quantidadeVendida);
-      console.log(novaQuantidade);
-      console.log(item.produto.nome);
-      console.log(item.produto.preco);
-      console.log(item.produto.precovenda);
-      console.log(item.produto.descricao);
       try {
         if (novaQuantidade <= 0) {
           const deleteResponse = await fetch(
@@ -197,7 +176,6 @@ const Caixa = () => {
             }
           );
           if (!deleteResponse.ok) throw new Error("Erro ao deletar produto");
-          console.log(`Produto ${productid} deletado com sucesso`);
           toast.success(`Produto ${item.produto.nome} deletado com sucesso!`);
         } else {
           const updateResponse = await fetch(
@@ -219,7 +197,6 @@ const Caixa = () => {
           );
 
           if (!updateResponse.ok) throw new Error("Erro ao atualizar produto");
-          console.log(`Produto ${productid} atualizado com sucesso`);
           toast.success(`Produto ${item.produto.nome} atualizado com sucesso!`);
         }
       } catch (error) {
@@ -251,7 +228,6 @@ const Caixa = () => {
     } else {
       setCarrinho([...carrinho, { produto, quantidade }]);
       toast.dark("item adicionado com sucesso");
-      console.log(carrinho);
     }
     // Atualizar produtos selecionados
     const novoProdutosSelecionados = { ...produtosSelecionados };
@@ -305,7 +281,6 @@ const Caixa = () => {
   };
 
   const handleClientChange = (event) => {
-    console.log(event.target.value);
     console.table(cliente);
     setSelectedClient(event.target.value);
   };
