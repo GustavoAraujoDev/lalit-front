@@ -208,7 +208,6 @@ function ProductsPage() {
     if (
       isNaN(dataToInsert.preco) ||
       (dataToInsert.precovenda && isNaN(dataToInsert.precovenda)) ||
-      (dataToInsert.precocombo && isNaN(dataToInsert.precocombo)) ||
       (dataToInsert.quantidade && isNaN(dataToInsert.quantidade))
     ) {
       toast.error("Por favor, insira valores numéricos válidos.");
@@ -228,8 +227,7 @@ function ProductsPage() {
 
     // Validação para precovenda e precocombo serem maiores que preco
     if (
-      parseFloat(dataToInsert.precovenda) <= parseFloat(dataToInsert.preco) ||
-      parseFloat(dataToInsert.precocombo) <= parseFloat(dataToInsert.preco)
+      parseFloat(dataToInsert.precovenda) <= parseFloat(dataToInsert.preco)
     ) {
       toast.error("precovenda e precocombo devem ser maiores que preco.");
       return;
