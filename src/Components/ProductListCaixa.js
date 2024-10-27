@@ -90,18 +90,19 @@ const Caixa = () => {
 
   const finalizarCompra = async () => {
     const items = carrinho.map((item) => {
-      const preco = dataToInsert.combo === "combo" 
-        ? parseFloat(item.produto.precocombo) 
-        : parseFloat(item.produto.precovenda);
+      const preco =
+        dataToInsert.combo === "combo"
+          ? parseFloat(item.produto.precocombo)
+          : parseFloat(item.produto.precovenda);
       return {
-      productid: Number(item.produto.productid),
-      nome: item.produto.nome,
-      descricao: item.produto.descricao,
-      preco: Number(item.produto.preco), // Converte para número
-      precovenda: preco, // Converte para número
-      quantidade: Number(item.quantidade),
-    }
-  });
+        productid: Number(item.produto.productid),
+        nome: item.produto.nome,
+        descricao: item.produto.descricao,
+        preco: Number(item.produto.preco), // Converte para número
+        precovenda: preco, // Converte para número
+        quantidade: Number(item.quantidade),
+      };
+    });
 
     const totalPrice = calcularTotal();
     if (carrinho.length === 0) {
@@ -110,6 +111,10 @@ const Caixa = () => {
     }
     if (!selectedClient) {
       toast.error("Selecione um cliente antes de finalizar a compra");
+      return;
+    }
+    if (!dataToInsert.combo) {
+      toast.error("Selecione se tem combo antes de finalizar a compra");
       return;
     }
     if (!dataToInsert.pagamento) {
@@ -125,7 +130,6 @@ const Caixa = () => {
 
     const productIds = items.map((item) => item.productid);
 
-    toast.success("Compra finalizada com Sucesso");
     const response = await fetch("https://lalitaapi.onrender.com/Vendas", {
       method: "POST",
       headers: {
@@ -254,23 +258,27 @@ const Caixa = () => {
   const calcularTotal = () => {
     let total = 0;
     carrinho.forEach((item) => {
-      const preco = dataToInsert.combo === "combo" 
-        ? parseFloat(item.produto.precocombo) 
-        : parseFloat(item.produto.precovenda);
-  
+      const preco =
+        dataToInsert.combo === "combo"
+          ? parseFloat(item.produto.precocombo)
+          : parseFloat(item.produto.precovenda);
+
       // Para combos, não aplica desconto
       if (dataToInsert.combo === "combo") {
         total += preco * item.quantidade; // Preço normal para combo
       } else {
         // Aplicar desconto de 6% para pagamentos em PIX ou dinheiro
-        if (dataToInsert.pagamento === "pix" || dataToInsert.pagamento === "dinheiro") {
+        if (
+          dataToInsert.pagamento === "pix" ||
+          dataToInsert.pagamento === "dinheiro"
+        ) {
           total += preco * item.quantidade * 0.94; // 6% de desconto
         } else {
           total += preco * item.quantidade; // Preço normal para outros pagamentos
         }
       }
     });
-  
+
     return total;
   };
 
@@ -329,7 +337,8 @@ const Caixa = () => {
                       }
                       secondary={
                         <Typography>
-                          {`R$ ${produto.precovenda}`} - {`R$ ${produto.precocombo}`}
+                          {`R$ ${produto.precovenda}`} -{" "}
+                          {`R$ ${produto.precocombo}`}
                         </Typography>
                       }
                     />
@@ -411,7 +420,7 @@ const Caixa = () => {
                 <Typography style={{ color: "#c0844a" }} variant="subtitle1">
                   Valor Total R$ {calcularTotal().toFixed(2)}
                 </Typography>
-  
+
                 <label style={{ color: "#c0844a" }}>
                   Selecione o Cliente
                   <Select
@@ -444,13 +453,11 @@ const Caixa = () => {
                     value="combo"
                     control={<Radio />}
                     label="COMBO"
-                   
                   />
                   <FormControlLabel
                     value="naocombo"
                     control={<Radio />}
                     label="NÃO COMBO"
-                    
                   />
                 </RadioGroup>
                 <RadioGroup
