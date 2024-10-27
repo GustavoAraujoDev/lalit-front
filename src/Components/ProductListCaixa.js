@@ -39,7 +39,7 @@ const Caixa = () => {
     combo: "",
   });
   const [selectedClient, setSelectedClient] = useState("");
-  onsole.log(selectedClient)
+  console.log(selectedClient)
 
   const clearForm = () => {
     setDataToInsert({
