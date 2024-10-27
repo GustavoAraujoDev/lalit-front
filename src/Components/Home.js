@@ -57,7 +57,6 @@ function Home() {
             setProdutosTotal(produtosTotal);
             
             const idsvendas = Object.values(vendasData).map(venda => venda.Vendaid);
-
             // Realiza as requisições para cada item da venda usando o ID da venda
             const promessasItensVendas = idsvendas.map(Vendaid => fetch(`https://lalitaapi.onrender.com/Vendas/itens/${Vendaid}`));
             console.log(promessasItensVendas);

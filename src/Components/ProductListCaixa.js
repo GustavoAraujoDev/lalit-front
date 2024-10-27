@@ -89,14 +89,19 @@ const Caixa = () => {
   }, []);
 
   const finalizarCompra = async () => {
-    const items = carrinho.map((item) => ({
+    const items = carrinho.map((item) => {
+      const preco = dataToInsert.combo === "combo" 
+        ? parseFloat(item.produto.precocombo) 
+        : parseFloat(item.produto.precovenda);
+      return {
       productid: Number(item.produto.productid),
       nome: item.produto.nome,
       descricao: item.produto.descricao,
       preco: Number(item.produto.preco), // Converte para número
-      precovenda: Number(item.produto.precovenda), // Converte para número
+      precovenda: preco, // Converte para número
       quantidade: Number(item.quantidade),
-    }));
+    }
+  });
 
     const totalPrice = calcularTotal();
     if (carrinho.length === 0) {
