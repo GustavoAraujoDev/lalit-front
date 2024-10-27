@@ -273,7 +273,7 @@ const Caixa = () => {
 
   const calcularTotal = () => {
      if (dataToInsert.combo === "combo") {
-     if (dataToInsert.pagamento === "pix" || dataToInsert.pagamento === "dinheiro") {
+     if (dataToInsert.pagamento === "pix" || dataToInsert.pagamento === "dinheiro" || dataToInsert.pagamento === "cartaodecredito") {
       return carrinho.reduce(
         (total, item) =>
           total + parseFloat(item.produto.precocombo) * item.quantidade,
@@ -287,7 +287,8 @@ const Caixa = () => {
             total + parseFloat(item.produto.precovenda) * item.quantidade * 0.94,
           0
         );
-      } else {
+      } 
+      if (dataToInsert.pagamento === "cartaodecredito") {
         return carrinho.reduce(
           (total, item) =>
             total + parseFloat(item.produto.precovenda) * item.quantidade,
@@ -468,11 +469,13 @@ const Caixa = () => {
                     value="combo"
                     control={<Radio />}
                     label="COMBO"
+                    disabled={!dataToInsert.pagamento}
                   />
                   <FormControlLabel
                     value="naocombo"
                     control={<Radio />}
                     label="NÃO COMBO"
+                    disabled={!dataToInsert.pagamento}
                   />
                 </RadioGroup>
                 <RadioGroup
