@@ -33,7 +33,6 @@ const Caixa = () => {
   const [produtosSelecionados, setProdutosSelecionados] = useState({});
   const [filtroNome, setFiltroNome] = useState("");
   const [Quantidade, setQuantidade] = useState(0);
-  const [desconto, setDesconto] = useState(0);
   const [dataToInsert, setDataToInsert] = useState({
     situacao: "",
     pagamento: "",
@@ -273,7 +272,6 @@ const Caixa = () => {
 
   const calcularTotal = () => {
     let total = 0;
-    let desconto = 0;
     carrinho.forEach((item) => {
       const preco = dataToInsert.combo === "combo" 
         ? parseFloat(item.produto.precocombo) 
@@ -286,8 +284,6 @@ const Caixa = () => {
         // Aplicar desconto de 6% para pagamentos em PIX ou dinheiro
         if (dataToInsert.pagamento === "pix" || dataToInsert.pagamento === "dinheiro") {
           total += preco * item.quantidade * 0.94; // 6% de desconto
-          desconto = 6;     
-          setDesconto(desconto)
         } else {
           total += preco * item.quantidade; // Preço normal para outros pagamentos
         }
@@ -435,7 +431,7 @@ const Caixa = () => {
                 <Typography style={{ color: "#c0844a" }} variant="subtitle1">
                   Valor Total R$ {calcularTotal().toFixed(2)}
                 </Typography>
-                <Typography> {`${desconto} %`}</Typography>
+  
                 <label style={{ color: "#c0844a" }}>
                   Selecione o Cliente
                   <Select
