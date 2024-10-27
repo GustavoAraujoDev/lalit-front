@@ -273,14 +273,12 @@ const Caixa = () => {
 
   const calcularTotal = () => {
     if (dataToInsert.pagamento === "pix") {
-      setDesconto(6)
       return carrinho.reduce(
         (total, item) =>
           total + parseFloat(item.produto.precovenda) * item.quantidade * 0.94,
         0
       );
     } else if (dataToInsert.pagamento === "dinheiro") {
-      setDesconto(6)
       return carrinho.reduce(
         (total, item) =>
           total + parseFloat(item.produto.precovenda) * item.quantidade * 0.94,
