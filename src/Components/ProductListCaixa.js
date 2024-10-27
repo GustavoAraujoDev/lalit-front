@@ -96,7 +96,7 @@ const Caixa = () => {
           ? parseFloat(item.produto.precocombo)
           : parseFloat(item.produto.precovenda);
       return {
-        productid: Number(item.produto.productid),
+        productid: item.produto.productid,
         nome: item.produto.nome,
         descricao: item.produto.descricao,
         preco: Number(item.produto.preco), // Converte para número
