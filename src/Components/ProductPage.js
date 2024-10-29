@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { toast } from "react-toastify";
 import { jsPDF } from "jspdf";
-import { Link } from "react-router-dom";
 import Barcode from "react-barcode";
 import bwipjs from "bwip-js"; // Biblioteca para gerar códigos de barras como imagem base64
 import Button from "@mui/material/Button";
