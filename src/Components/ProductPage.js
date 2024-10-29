@@ -52,7 +52,6 @@ function ProductsPage() {
         const response = await fetch("https://lalitaapi.onrender.com/Produtos");
         if (!response.ok) throw new Error("Erro ao buscar produtos");
         const data = await response.json();
-        console.table(data);
         // Converte o objeto de produtos em um array
         const productsArray = Object.keys(data).map((key) => ({
           productid: key,
@@ -83,6 +82,49 @@ function ProductsPage() {
 
   const handleEditProduct = async (e) => {
     e.preventDefault();
+
+     // Validação de campos obrigatórios
+     if (
+      !dataToInsert.nome ||
+      !dataToInsert.preco ||
+      !dataToInsert.precovenda ||
+      !dataToInsert.precocombo ||
+      !dataToInsert.quantidade
+    ) {
+      toast.error("Por favor, preencha os campos obrigatórios.");
+      return;
+    }
+
+    // Validação de formato
+    if (
+      isNaN(dataToInsert.preco) ||
+      (dataToInsert.precovenda && isNaN(dataToInsert.precovenda)) ||
+      (dataToInsert.quantidade && isNaN(dataToInsert.quantidade))
+    ) {
+      toast.error("Por favor, insira valores numéricos válidos.");
+      return;
+    }
+
+    // Validação de valores
+    if (
+      parseFloat(dataToInsert.preco) <= 0 ||
+      (dataToInsert.quantidade && parseInt(dataToInsert.quantidade) <= 0) ||
+      (dataToInsert.precovenda && parseFloat(dataToInsert.precovenda) <= 0) ||
+      (dataToInsert.precocombo && parseFloat(dataToInsert.precocombo) <= 0)
+    ) {
+      toast.error("Por favor, insira valores positivos.");
+      return;
+    }
+
+    // Validação para precovenda e precocombo serem maiores que preco
+    if (
+      parseFloat(dataToInsert.precovenda) <= parseFloat(dataToInsert.preco)
+    ) {
+      toast.error("precovenda e precocombo devem ser maiores que preco.");
+      return;
+    }
+
+
     try {
       const updateResponse = await fetch(
         `https://lalitaapi.onrender.com/Produtos/${productid}`,
