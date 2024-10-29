@@ -29,6 +29,7 @@ import "react-toastify/dist/ReactToastify.css";
 function ProductsPage() {
   const [products, setProducts] = useState([]);
   const [openAddDialog, setOpenAddDialog] = useState(false);
+  const [OpenEditDialog, setOpenEditDialog] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [dataToInsert, setDataToInsert] = useState({
     nome: "",
@@ -43,6 +44,8 @@ function ProductsPage() {
   const handleOpenAddDialog = () => setOpenAddDialog(true);
   const handleCloseAddDialog = () => setOpenAddDialog(false);
   const handleCloseDeleteDialog = () => setOpenDeleteDialog(false);
+  const handleOpenEditDialog = () => setOpenEditDialog(true);
+  const handleCloseEditDialog = () => setOpenEditDialog(false);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -65,6 +68,61 @@ function ProductsPage() {
     };
     fetchProducts();
   }, []);
+
+  const handleEdit = (product) => {
+    setDataToInsert({
+      nome: product.nome,
+      descricao: product.descricao,
+      preco: product.preco,
+      precovenda: product.precovenda,
+      precocombo: product.precocombo,
+      quantidade: product.quantidade,
+    });
+    setProductid(product.productid);
+    setOpenEditDialog(true);
+  };
+
+  const handleEditProduct = async (e) => {
+    e.preventDefault();
+    try {
+      const updateResponse = await fetch(
+        `https://lalitaapi.onrender.com/Produtos/${productid}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            nome: dataToInsert.nome,
+            descricao: dataToInsert.descricao,
+            preco: dataToInsert.preco,
+            precovenda: dataToInsert.precovenda,
+            precocombo: dataToInsert.precocombo,
+            quantidade: dataToInsert.quantidade,
+          }),
+        }
+      );
+
+      if (!updateResponse.ok) throw new Error("Erro ao atualizar produto");
+      
+      if (updateResponse.ok) {
+        const updatedProduct = await updateResponse.json();
+        toast.success(`Produto ${dataToInsert.nome} atualizado com sucesso!`);
+        setProducts(
+          products.map((product) =>
+            product.productid === productid ? updatedProduct : product
+          )
+        );
+        handleCloseEditDialog();
+        clearForm();
+      } else {
+        toast.error("Erro ao atualizar o produto");
+      }
+    } catch (error) {
+      console.error("Erro ao atualizar produto:", error);
+      toast.error("Erro ao atualizar produto.");
+    }
+  };
 
   const handleDownload = async (
     barcodeValue,
@@ -347,8 +405,7 @@ function ProductsPage() {
                         <TableCell>
                           <IconButton
                             aria-label="editar"
-                            component={Link}
-                            to={`/products/edit/${product.productid}`}
+                            onClick={() => handleEdit(product)}
                             style={{ marginRight: "5px" }}
                           >
                             <EditIcon />
@@ -462,6 +519,68 @@ function ProductsPage() {
                 </Button>
               </DialogActions>
             </Dialog>
+
+        <Dialog open={OpenEditDialog} onClose={handleCloseEditDialog}>
+        <DialogTitle>Editar Produto</DialogTitle>
+        <DialogContent>
+          <TextField
+            name="nome"
+            label="Nome"
+            value={dataToInsert.nome}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            name="descricao"
+            label="Descrição"
+            value={dataToInsert.descricao}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            name="preco"
+            label="Preço"
+            value={dataToInsert.preco}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            name="precocombo"
+            label="Preço de Combo"
+            value={dataToInsert.precocombo}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            name="precovenda"
+            label="Preço de Venda"
+            value={dataToInsert.precovenda}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            name="quantidade"
+            label="Quantidade"
+            value={dataToInsert.quantidade}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseEditDialog} color="secondary">
+            Cancelar
+          </Button>
+          <Button onClick={handleEditProduct} color="primary">
+            Salvar Alterações
+          </Button>
+        </DialogActions>
+      </Dialog>
           </div>
         </Grid>
       </Grid>
