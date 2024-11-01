@@ -95,7 +95,7 @@ function SalesPage() {
       (R$ ${item.precovenda}).
       ${item.descricao}. 
       ${item.quantidade}.`
-    ).replace(/\n/g, '%0A'); // Formata os itens
+    ).join("%0A"); // Formata os itens
   
  const comprovanteVenda = `
 *COMPROVANTE DE VENDA*
