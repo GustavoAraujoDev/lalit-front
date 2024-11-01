@@ -94,19 +94,18 @@ function SalesPage() {
         `- *${item.nome}*. /n (R$ ${item.precovenda}). /n ${item.descricao}. /n ${item.quantidade}. /n/n`
     ).join("%0A"); // Formata os itens
   
-  const comprovanteVenda = 
-  `*COMPROVANTE DE VENDA*. /n/n
-  Cliente: ${sales.clientid}. /n
-  Data: ${sales.createdAt ? new Date(sales.createdAt).toLocaleDateString() : "Data inválida"}. /n
-  **Itens Comprados:**/n${itensLista}. /n/n
-  Total: R$ ${sales.totalprice}. /n
-  Pagamento: ${sales.pagamento}. /n/n
-  Obrigado pela sua compra!. /n/n
-  *Nome da Empresa*. /n
-  *Telefone: (xx) xxxx-xxxx*. /n
-  *E-mail: contato@suaempresa.com*`;
-  
-  
+ const comprovanteVenda = 
+  `*COMPROVANTE DE VENDA*%0A%0A` +
+  `Cliente: ${sales.clientid}%0A` +
+  `Data: ${sales.createdAt ? new Date(sales.createdAt).toLocaleDateString() : "Data inválida"}%0A%0A` +
+  `*Itens Comprados:*%0A${itensLista}%0A%0A` +
+  `Total: R$ ${sales.totalprice}%0A` +
+  `Pagamento: ${sales.pagamento}%0A%0A` +
+  `Obrigado pela sua compra!%0A%0A` +
+  `*Nome da Empresa*%0A` +
+  `*Telefone: (xx) xxxx-xxxx*%0A` +
+  `*E-mail: contato@suaempresa.com*`;
+
     const telefone = await phone(sales.clientid);
     
     // Verifique se o telefone foi encontrado antes de prosseguir
