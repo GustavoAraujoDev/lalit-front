@@ -91,31 +91,20 @@ function SalesPage() {
     // Criar a mensagem profissional
     const itensLista = ItensSales.map(
       (item) =>
-      `*${item.nome}*.
-      (R$ ${item.precovenda}).
-      ${item.descricao}. 
-      ${item.quantidade}.`
+        `- *${item.nome}*. /n (R$ ${item.precovenda}). /n ${item.descricao}. /n ${item.quantidade}. /n/n`
     ).join("%0A"); // Formata os itens
   
- const comprovanteVenda = `
-*COMPROVANTE DE VENDA*
-
-Cliente: *${sales.clientid}*
-Data: 01/11/2024
-
-*Itens Comprados:*
-• *${itensLista}*
-
-*Total:* R$ *${sales.totalprice}*
-*Pagamento:* *${sales.pagamento}*
-
-Obrigado pela sua compra!
-
-*Nome da Empresa*
-*Telefone:* (xx) xxxx-xxxx
-*E-mail:* contato@suaempresa.com
-`.replace(/\n/g, '%0A');
-
+ const comprovanteVenda = 
+  `*COMPROVANTE DE VENDA*. \n\n` +
+  `Cliente: ${sales.clientid}.\n` +
+  `Data: ${sales.createdAt ? new Date(sales.createdAt).toLocaleDateString() : "Data inválida"}.\n\n` +
+  `*Itens Comprados:*\n${itensLista}. \n\n` +
+  `Total: R$ ${sales.totalprice}. \n` +
+  `Pagamento: ${sales.pagamento}. \n\n` +
+  `Obrigado pela sua compra!\n\n` +
+  `*Nome da Empresa*. \n` +
+  `*Telefone: (xx) xxxx-xxxx*. \n` +
+  `*E-mail: contato@suaempresa.com*`;
 
     const telefone = await phone(sales.clientid);
     
