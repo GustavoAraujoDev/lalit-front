@@ -120,7 +120,7 @@ function SalesPage() {
     console.log(itensLista);
     
     // Codificar a mensagem para URL
-    const mensagemCodificada = encodeURIComponent(mensagemProfissional);
+    const mensagemCodificada = encodeURIComponent(comprovanteVenda);
   
     // Criar o link do WhatsApp
     const numeroComDdi = `55${telefone}`; // Adiciona DDI do Brasil se necessário
