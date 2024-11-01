@@ -95,16 +95,16 @@ function SalesPage() {
     ).join("%0A"); // Formata os itens
   
   const comprovanteVenda = 
-  `*COMPROVANTE DE VENDA*. /n/n` +
-  `Cliente: ${sales.clientid}. /n` +
-  `Data: ${sales.createdAt ? new Date(sales.createdAt).toLocaleDateString() : "Data inválida"}. /n` +
-  `**Itens Comprados:**/n${itensLista}. /n/n` +
-  `Total: R$ ${sales.totalprice}. /n` +
-  `Pagamento: ${sales.pagamento}. /n/n` +
-  `Obrigado pela sua compra!. /n/n` +
-  `*Nome da Empresa*. /n` +
-  `*Telefone: (xx) xxxx-xxxx*. /n` +
-  `*E-mail: contato@suaempresa.com*`;
+  `*COMPROVANTE DE VENDA*. /n/n
+  Cliente: ${sales.clientid}. /n
+  Data: ${sales.createdAt ? new Date(sales.createdAt).toLocaleDateString() : "Data inválida"}. /n
+  **Itens Comprados:**/n${itensLista}. /n/n
+  Total: R$ ${sales.totalprice}. /n
+  Pagamento: ${sales.pagamento}. /n/n
+  Obrigado pela sua compra!. /n/n
+  *Nome da Empresa*. /n
+  *Telefone: (xx) xxxx-xxxx*. /n
+  *E-mail: contato@suaempresa.com*`;
   
   
     const telefone = await phone(sales.clientid);
