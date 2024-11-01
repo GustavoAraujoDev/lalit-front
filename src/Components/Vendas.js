@@ -91,8 +91,11 @@ function SalesPage() {
     // Criar a mensagem profissional
     const itensLista = ItensSales.map(
       (item) =>
-        `- *${item.nome}*. /n (R$ ${item.precovenda}). /n ${item.descricao}. /n ${item.quantidade}. /n/n`
-    ).join("%0A"); // Formata os itens
+      `*${item.nome}*.\n
+      (R$ ${item.precovenda}).\n 
+      ${item.descricao}.\n 
+      ${item.quantidade}.`
+    ); // Formata os itens
   
  const comprovanteVenda = 
   `*COMPROVANTE DE VENDA*. \n\n` +
