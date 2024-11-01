@@ -91,28 +91,21 @@ function SalesPage() {
     // Criar a mensagem profissional
     const itensLista = ItensSales.map(
       (item) =>
-        `- *${item.nome}* - (R$ ${item.precovenda}) - ${item.descricao} - ${item.quantidade}`
+        `- *${item.nome}*. /n (R$ ${item.precovenda}). /n ${item.descricao}. /n ${item.quantidade}. /n/n`
     ).join("%0A"); // Formata os itens
   
-    const mensagemProfissional =
-    `Prezado(a) ${sales.clientid},%0A%0A` +
-    `É com grande satisfação que confirmamos o recebimento do seu pedido.%0A` +
-    `Aqui estão os detalhes da sua compra:%0A%0A` +
-    `Data da Compra: *${sales.createdAt ? new Date(sales.createdAt).toLocaleDateString() : "Data inválida"}*%0A` +
-    `Itens Comprados:%0A` +
-    `${itensLista}%0A` + // Adiciona a lista de itens
-    `Total: *R$ ${sales.totalprice}*%0A` +
-    `Forma de Pagamento: *${sales.pagamento}*%0A%0A` +
-    `Estamos comprometidos em fornecer um serviço de excelência e garantir que sua experiência de compra seja a melhor possível.%0A` +
-    `Seu pedido está em processamento e será enviado em breve.%0A` +
-    `Você receberá uma notificação assim que ele for despachado.%0A%0A` +
-    `Se precisar de mais informações ou assistência, não hesite em nos contatar.%0A` +
-    `Nossa equipe está à disposição para ajudar você.%0A%0A` +
-    `Agradecemos pela sua confiança em nossa empresa.%0A%0A` +
-    `Atenciosamente,%0A` +
-    `*Nome da Sua Empresa*%0A` +
-    `*Telefone: (xx) xxxx-xxxx*%0A` +
-    `*E-mail: contato@suaempresa.com*`;  
+  const comprovanteVenda = 
+  `*COMPROVANTE DE VENDA*. /n/n` +
+  `Cliente: ${sales.clientid}. /n` +
+  `Data: ${sales.createdAt ? new Date(sales.createdAt).toLocaleDateString() : "Data inválida"}. /n` +
+  `**Itens Comprados:**/n${itensLista}. /n/n` +
+  `Total: R$ ${sales.totalprice}. /n` +
+  `Pagamento: ${sales.pagamento}. /n/n` +
+  `Obrigado pela sua compra!. /n/n` +
+  `*Nome da Empresa*. /n` +
+  `*Telefone: (xx) xxxx-xxxx*. /n` +
+  `*E-mail: contato@suaempresa.com*`;
+  
   
     const telefone = await phone(sales.clientid);
     
