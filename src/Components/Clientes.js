@@ -131,12 +131,6 @@ if (!cpfRegex.test(dataToInsert.cpf)) {
   return;
 }
 
- // Validação de CPF válido
- if (!isValidCPF(dataToInsert.cpf)) {
-  toast.error('Por favor, insira um CPF válido.');
-  return;
-}
-
 try {
   const response = await fetch("https://lalitaapi.onrender.com/Clientes", {
     method: "POST",
