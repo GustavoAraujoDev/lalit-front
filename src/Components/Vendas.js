@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { format } from "date-fns";
 import TextField from "@mui/material/TextField";
 import EditIcon from "@mui/icons-material/Edit";
 import SendIcon from "@mui/icons-material/Send";
@@ -56,10 +55,9 @@ function SalesPage() {
       [e.target.name]: e.target.value,
     });
   };
-  console.log(dataToInsert);
 
   const handlePagamento = async (sales) => {
-      if (valorrestante <= 0) {
+    if (valorrestante <= 0) {
       fetch(`https://lalitaapi.onrender.com/Vendas/${Vendaid}`, {
         method: "PUT",
         body: JSON.stringify({
@@ -87,7 +85,6 @@ function SalesPage() {
           headers: { "Content-Type": "application/json" },
         }
       );
-      console.log(response);
       if (response.ok) {
         toast.success("Pagamento cadastrado com sucesso");
         clearForm();
@@ -164,7 +161,7 @@ function SalesPage() {
         id: key,
         ...data[key],
       }));
-      console.log(vendasArray); // Verifique o que está sendo retornado aqui
+
       return vendasArray; // Agora retornamos apenas o telefone como string
     } catch (err) {
       console.error(err);
@@ -196,7 +193,6 @@ function SalesPage() {
         `https://lalitaapi.onrender.com/Clientes/phone/${clientid}`
       );
       const data = await response.json();
-      console.log(data); // Verifique o que está sendo retornado aqui
       return data.phone; // Agora retornamos apenas o telefone como string
     } catch (err) {
       console.error(err);
@@ -239,7 +235,6 @@ function SalesPage() {
       return; // Interrompe a função se o telefone não foi encontrado
     }
 
-
     // Codificar a mensagem para URL
     const mensagemCodificada = encodeURIComponent(comprovanteVenda);
 
@@ -251,7 +246,7 @@ function SalesPage() {
     window.open(linkWhatsApp, "_blank");
   }
 
-  const updateSaleStatus = (sale) => {    
+  const updateSaleStatus = (sale) => {
     const valorNumerico = parseFloat(dataToInsert.Valorrecebido);
     if (isNaN(valorNumerico) || valorNumerico <= 0) {
       toast.error("digite numero valido");
@@ -265,6 +260,12 @@ function SalesPage() {
     setSelectedaddSales(sale);
     setOpenUpdateDialog(true);
   };
+
+  const handleConfirmed = () => {
+    handlePagamento(SelectedaddSales);
+    setOpenUpdateDialog(false);
+    
+  }
 
   const handleUpdateConfirmed = () => {
     setOpenUpdateDialog(false);
@@ -556,7 +557,7 @@ function SalesPage() {
                 Cancelar
               </Button>
               <Button
-                onClick={handlePagamento(SelectedaddSales)}
+                onClick={handleConfirmed}
                 color="secondary"
                 autoFocus
               >
