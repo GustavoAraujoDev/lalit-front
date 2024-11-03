@@ -109,6 +109,7 @@ function SalesPage() {
             });
         }
         setValorrestante(valorrestante);
+        setSelectedaddSales(null);
       } else {
         const errorData = await response.json();
         toast.error(`Erro ao cadastrar Pagamento: ${errorData.message}`);
@@ -122,7 +123,6 @@ function SalesPage() {
   const clearForm = () => {
     setDataToInsert({
       Valorrecebido: "",
-      valorrestante: "",
     });
   };
 
