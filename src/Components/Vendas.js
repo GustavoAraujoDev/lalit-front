@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { format } from "date-fns";
+import TextField from "@mui/material/TextField";
 import EditIcon from "@mui/icons-material/Edit";
-import SendIcon from '@mui/icons-material/Send';
+import SendIcon from "@mui/icons-material/Send";
 import { toast } from "react-toastify";
 import TableContainer from "@mui/material/TableContainer";
 import Table from "@mui/material/Table";
@@ -31,18 +32,110 @@ import "react-toastify/dist/ReactToastify.css";
 
 function SalesPage() {
   const [sales, setSales] = useState([]);
+  const [SelectedaddSales, setSelectedaddSales] = useState(null);
   const [ItensSales, setItensSales] = useState([]);
   const [selectedSale, setSelectedSale] = useState(null);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [Vendaid, setVendaid] = useState(null);
+  const [valorrestante, setValorrestante] = useState(null);
+  const [dataToInsert, setDataToInsert] = useState({
+    Valorrecebido: "",
+  });
   const [openUpdateDialog, setOpenUpdateDialog] = useState(false);
   const [filteredSales, setFilteredSales] = useState([]);
   const [filterloading, setFilterloading] = useState(false);
   useEffect(() => {
     fetchSales();
   }, []);
+
+  const handleChange = (e) => {
+    setDataToInsert({
+      ...dataToInsert,
+      [e.target.name]: e.target.value,
+    });
+  };
+  console.log(dataToInsert);
+
+  const handlePagamento = async (sales) => {
+
+    const valorNumerico = parseFloat(dataToInsert.Valorrecebido);
+    if (isNaN(valorNumerico) || valorNumerico <= 0) {
+      toast.error("digite numero valido");
+      return;
+    }
+    if (valorNumerico > valorrestante) {
+      toast.error(`digite valor ate ${valorrestante}`);
+      return;
+    }
+    
+    if (valorrestante === 0) {
+      fetch(`https://lalitaapi.onrender.com/Vendas/${Vendaid}`, {
+        method: "PUT",
+        body: JSON.stringify({
+          situacao: "Concluida",
+        }),
+        headers: { "Content-Type": "application/json" },
+      })
+        .then(() => {
+          toast.success("Venda Atualizada com sucesso");
+          fetchSales();
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
+
+    const vendaid = sales.Vendaid;
+    const Vendaid = sales.Vendaid;
+    try {
+      const response = await fetch(
+        `https://lalitaapi.onrender.com/Vendas/pagamentos/${vendaid}`,
+        {
+          method: "POST",
+          body: JSON.stringify(dataToInsert),
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      console.log(response);
+      if (response.ok) {
+        toast.success("Pagamento cadastrado com sucesso");
+        clearForm();
+        const valorrestante = await calculartotal(sales);
+        if(valorrestante === 0){
+          fetch(`https://lalitaapi.onrender.com/Vendas/${Vendaid}`, {
+            method: "PUT",
+            body: JSON.stringify({
+              situacao: "Concluida",
+            }),
+            headers: { "Content-Type": "application/json" },
+          })
+            .then(() => {
+              toast.success("Venda Atualizada com sucesso");
+              fetchSales();
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+        }
+        setValorrestante(valorrestante);
+      } else {
+        const errorData = await response.json();
+        toast.error(`Erro ao cadastrar Pagamento: ${errorData.message}`);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("Erro ao cadastrar produto.");
+    }
+  };
+
+  const clearForm = () => {
+    setDataToInsert({
+      Valorrecebido: "",
+      valorrestante: "",
+    });
+  };
 
   const handleCloseDeleteDialog = () => {
     setOpenDeleteDialog(false);
@@ -52,8 +145,6 @@ function SalesPage() {
     setOpenUpdateDialog(false);
   };
 
-  console.table(filteredSales);
-  console.table(ItensSales);
 
   const fetchSales = () => {
     fetch("https://lalitaapi.onrender.com/Vendas")
@@ -73,10 +164,51 @@ function SalesPage() {
       });
   };
 
+  const fetchpagamentos = async (sales) => {
+    const vendaid = sales.Vendaid;
+    try {
+      const response = await fetch(
+        `https://lalitaapi.onrender.com/Vendas/pagamentos/${vendaid}`
+      );
+      const data = await response.json();
+       // Converte o objeto de produtos em um array
+       const vendasArray = Object.keys(data).map((key) => ({
+        id: key,
+        ...data[key],
+      }));
+      console.log(vendasArray);// Verifique o que está sendo retornado aqui
+      return vendasArray; // Agora retornamos apenas o telefone como string
+    } catch (err) {
+      console.error(err);
+      toast.error("Erro ao buscar vendas.");
+      return {}; // Retorne null em caso de erro
+    }
+  };
+
+  const calculartotal = async (sales) => {
+    const pagamentos = await fetchpagamentos(sales);
+    const valorvenda = sales.totalprice;
+  
+    // Converte `Valorrecebido` para número e soma
+    const totalRecebido = pagamentos.reduce((total, pagamento) => {
+      const valor = parseFloat(pagamento.Valorrecebido);
+      return total + (isNaN(valor) ? 0 : valor); // Ignora valores não numéricos
+    }, 0);
+  
+    // Calcula o valor restante subtraindo o total recebido do valor da venda
+    const restante = valorvenda - totalRecebido;
+  
+   return restante; // Retorna o valor restante
+  };
+  
+  
+
   const phone = async (Clientid) => {
     const clientid = encodeURIComponent(Clientid);
     try {
-      const response = await fetch(`https://lalitaapi.onrender.com/Clientes/phone/${clientid}`);
+      const response = await fetch(
+        `https://lalitaapi.onrender.com/Clientes/phone/${clientid}`
+      );
       const data = await response.json();
       console.log(data); // Verifique o que está sendo retornado aqui
       return data.phone; // Agora retornamos apenas o telefone como string
@@ -86,18 +218,18 @@ function SalesPage() {
       return {}; // Retorne null em caso de erro
     }
   };
-  
+
   async function enviarComprovanteWhatsApp(sales) {
     // Criar a mensagem profissional
     const itensLista = ItensSales.map(
       (item) =>
-      `*${item.nome}*.\n
+        `${item.nome}.\n
       (R$ ${item.precovenda}).\n 
       ${item.descricao}.\n 
       ${item.quantidade}.`
     ); // Formata os itens
-  
- const comprovanteVenda = 
+
+    const comprovanteVenda = 
   `*COMPROVANTE DE VENDA*. \n\n` +
   `Cliente: ${sales.clientid}.\n` +
   `Data: ${sales.createdAt ? new Date(sales.createdAt).toLocaleDateString() : "Data inválida"}.\n\n` +
@@ -109,31 +241,33 @@ function SalesPage() {
   `*Telefone: (xx) xxxx-xxxx*. \n` +
   `*E-mail: contato@suaempresa.com*`;
 
+
     const telefone = await phone(sales.clientid);
-    
+
     // Verifique se o telefone foi encontrado antes de prosseguir
     if (!telefone) {
       console.error("Telefone não encontrado.");
       return; // Interrompe a função se o telefone não foi encontrado
     }
-    
+
     console.log(telefone);
     console.log(sales);
     console.log(itensLista);
-    
+
     // Codificar a mensagem para URL
     const mensagemCodificada = encodeURIComponent(comprovanteVenda);
-  
+
     // Criar o link do WhatsApp
     const numeroComDdi = `55${telefone}`; // Adiciona DDI do Brasil se necessário
     const linkWhatsApp = `https://wa.me/${numeroComDdi}?text=${mensagemCodificada}`;
-  
+
     // Abrir o link no WhatsApp
     window.open(linkWhatsApp, "_blank");
   }
-  
-  const updateSaleStatus = (id) => {
-    setVendaid(id);
+
+  const updateSaleStatus = (sale) => {
+    setVendaid(sale.Vendaid);
+    setSelectedaddSales(sale)
     setOpenUpdateDialog(true);
   };
 
@@ -200,6 +334,8 @@ function SalesPage() {
     } else {
       try {
         const saleItems = await fetchSaleItems(sale.Vendaid);
+        const valorrestante = await calculartotal(sale);
+        setValorrestante(valorrestante);
         setItensSales(saleItems);
         setSelectedSale(sale);
       } catch (error) {
@@ -352,11 +488,24 @@ function SalesPage() {
                               <p>Cliente: {sale.clientid}</p>
                               <p>Combo: {sale.combo}</p>
                               {sale.situacao === "Pendente" && (
-                                <IconButton
-                                  onClick={() => updateSaleStatus(sale.Vendaid)}
-                                >
-                                  <DoneIcon />
-                                </IconButton>
+                                <>
+                                  <p>Valorr Restante: {valorrestante}</p>
+
+                                  <TextField
+                                    name="Valorrecebido"
+                                    label="Valor"
+                                    value={dataToInsert.Valorrecebido}
+                                    onChange={handleChange}
+                                    fullWidth
+                                    margin="normal"
+                                  />
+
+                                  <IconButton
+                                    onClick={() => updateSaleStatus(sale)}
+                                  >
+                                    <DoneIcon />
+                                  </IconButton>
+                                </>
                               )}
                               {
                                 <IconButton
@@ -404,7 +553,7 @@ function SalesPage() {
             <DialogTitle>Atualizar Venda</DialogTitle>
             <DialogContent>
               <DialogContentText>
-                Tem certeza que deseja Atualizar esta venda?
+                Tem certeza que deseja Atualizar/Realizar esse Pagamento?
               </DialogContentText>
             </DialogContent>
             <DialogActions>
@@ -412,11 +561,11 @@ function SalesPage() {
                 Cancelar
               </Button>
               <Button
-                onClick={handleUpdateConfirmed}
+                onClick={handlePagamento(SelectedaddSales)}
                 color="secondary"
                 autoFocus
               >
-                Atualizar
+                Atualizar/Pagamento
               </Button>
             </DialogActions>
           </Dialog>
