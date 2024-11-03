@@ -59,17 +59,7 @@ function SalesPage() {
   console.log(dataToInsert);
 
   const handlePagamento = async (sales) => {
-    const valorNumerico = parseFloat(dataToInsert.Valorrecebido);
-    if (isNaN(valorNumerico) || valorNumerico <= 0) {
-      toast.error("digite numero valido");
-      return;
-    }
-    if (valorNumerico > valorrestante) {
-      toast.error(`digite valor ate ${valorrestante}`);
-      return;
-    }
-
-    if (valorrestante === 0) {
+      if (valorrestante <= 0) {
       fetch(`https://lalitaapi.onrender.com/Vendas/${Vendaid}`, {
         method: "PUT",
         body: JSON.stringify({
@@ -249,9 +239,6 @@ function SalesPage() {
       return; // Interrompe a função se o telefone não foi encontrado
     }
 
-    console.log(telefone);
-    console.log(sales);
-    console.log(itensLista);
 
     // Codificar a mensagem para URL
     const mensagemCodificada = encodeURIComponent(comprovanteVenda);
@@ -264,7 +251,16 @@ function SalesPage() {
     window.open(linkWhatsApp, "_blank");
   }
 
-  const updateSaleStatus = (sale) => {
+  const updateSaleStatus = (sale) => {    
+    const valorNumerico = parseFloat(dataToInsert.Valorrecebido);
+    if (isNaN(valorNumerico) || valorNumerico <= 0) {
+      toast.error("digite numero valido");
+      return;
+    }
+    if (valorNumerico > valorrestante) {
+      toast.error(`digite valor ate ${valorrestante}`);
+      return;
+    }
     setVendaid(sale.Vendaid);
     setSelectedaddSales(sale);
     setOpenUpdateDialog(true);
