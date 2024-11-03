@@ -59,7 +59,6 @@ function SalesPage() {
   console.log(dataToInsert);
 
   const handlePagamento = async (sales) => {
-
     const valorNumerico = parseFloat(dataToInsert.Valorrecebido);
     if (isNaN(valorNumerico) || valorNumerico <= 0) {
       toast.error("digite numero valido");
@@ -69,7 +68,7 @@ function SalesPage() {
       toast.error(`digite valor ate ${valorrestante}`);
       return;
     }
-    
+
     if (valorrestante === 0) {
       fetch(`https://lalitaapi.onrender.com/Vendas/${Vendaid}`, {
         method: "PUT",
@@ -103,7 +102,7 @@ function SalesPage() {
         toast.success("Pagamento cadastrado com sucesso");
         clearForm();
         const valorrestante = await calculartotal(sales);
-        if(valorrestante === 0){
+        if (valorrestante === 0) {
           fetch(`https://lalitaapi.onrender.com/Vendas/${Vendaid}`, {
             method: "PUT",
             body: JSON.stringify({
@@ -145,7 +144,6 @@ function SalesPage() {
     setOpenUpdateDialog(false);
   };
 
-
   const fetchSales = () => {
     fetch("https://lalitaapi.onrender.com/Vendas")
       .then((res) => res.json())
@@ -171,12 +169,12 @@ function SalesPage() {
         `https://lalitaapi.onrender.com/Vendas/pagamentos/${vendaid}`
       );
       const data = await response.json();
-       // Converte o objeto de produtos em um array
-       const vendasArray = Object.keys(data).map((key) => ({
+      // Converte o objeto de produtos em um array
+      const vendasArray = Object.keys(data).map((key) => ({
         id: key,
         ...data[key],
       }));
-      console.log(vendasArray);// Verifique o que está sendo retornado aqui
+      console.log(vendasArray); // Verifique o que está sendo retornado aqui
       return vendasArray; // Agora retornamos apenas o telefone como string
     } catch (err) {
       console.error(err);
@@ -188,20 +186,18 @@ function SalesPage() {
   const calculartotal = async (sales) => {
     const pagamentos = await fetchpagamentos(sales);
     const valorvenda = sales.totalprice;
-  
+
     // Converte `Valorrecebido` para número e soma
     const totalRecebido = pagamentos.reduce((total, pagamento) => {
       const valor = parseFloat(pagamento.Valorrecebido);
       return total + (isNaN(valor) ? 0 : valor); // Ignora valores não numéricos
     }, 0);
-  
+
     // Calcula o valor restante subtraindo o total recebido do valor da venda
     const restante = valorvenda - totalRecebido;
-  
-   return restante; // Retorna o valor restante
+
+    return restante; // Retorna o valor restante
   };
-  
-  
 
   const phone = async (Clientid) => {
     const clientid = encodeURIComponent(Clientid);
@@ -229,18 +225,21 @@ function SalesPage() {
       ${item.quantidade}.`
     ); // Formata os itens
 
-    const comprovanteVenda = 
-  `*COMPROVANTE DE VENDA*. \n\n` +
-  `Cliente: ${sales.clientid}.\n` +
-  `Data: ${sales.createdAt ? new Date(sales.createdAt).toLocaleDateString() : "Data inválida"}.\n\n` +
-  `*Itens Comprados:*\n${itensLista}. \n\n` +
-  `Total: R$ ${sales.totalprice}. \n` +
-  `Pagamento: ${sales.pagamento}. \n\n` +
-  `Obrigado pela sua compra!\n\n` +
-  `*Nome da Empresa*. \n` +
-  `*Telefone: (xx) xxxx-xxxx*. \n` +
-  `*E-mail: contato@suaempresa.com*`;
-
+    const comprovanteVenda =
+      `*COMPROVANTE DE VENDA*. \n\n` +
+      `Cliente: ${sales.clientid}.\n` +
+      `Data: ${
+        sales.createdAt
+          ? new Date(sales.createdAt).toLocaleDateString()
+          : "Data inválida"
+      }.\n\n` +
+      `*Itens Comprados:*\n${itensLista}. \n\n` +
+      `Total: R$ ${sales.totalprice}. \n` +
+      `Pagamento: ${sales.pagamento}. \n\n` +
+      `Obrigado pela sua compra!\n\n` +
+      `*Nome da Empresa*. \n` +
+      `*Telefone: (xx) xxxx-xxxx*. \n` +
+      `*E-mail: contato@suaempresa.com*`;
 
     const telefone = await phone(sales.clientid);
 
@@ -267,7 +266,7 @@ function SalesPage() {
 
   const updateSaleStatus = (sale) => {
     setVendaid(sale.Vendaid);
-    setSelectedaddSales(sale)
+    setSelectedaddSales(sale);
     setOpenUpdateDialog(true);
   };
 
