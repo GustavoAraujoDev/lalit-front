@@ -30,6 +30,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function SalesPage() {
+  const [filtroNome, setFiltroNome] = useState("");
   const [sales, setSales] = useState([]);
   const [SelectedaddSales, setSelectedaddSales] = useState(null);
   const [ItensSales, setItensSales] = useState([]);
@@ -208,7 +209,7 @@ function SalesPage() {
         `${item.nome}.\n
       (R$ ${item.precovenda}).\n 
       ${item.descricao}.\n 
-      ${item.quantidade}.`
+      ${item.quantidade}`
     ); // Formata os itens
 
     const comprovanteVenda =
@@ -223,9 +224,9 @@ function SalesPage() {
       `Total: R$ ${sales.totalprice}. \n` +
       `Pagamento: ${sales.pagamento}. \n\n` +
       `Obrigado pela sua compra!\n\n` +
-      `*Nome da Empresa*. \n` +
-      `*Telefone: (xx) xxxx-xxxx*. \n` +
-      `*E-mail: contato@suaempresa.com*`;
+      `*Lalitá Mundo Infantil*. \n` +
+      `*Telefone: (88) 99621-6001*. \n` +
+      `*E-mail: lalitamundoinfantil@gmail.com*`;
 
     const telefone = await phone(sales.clientid);
 
@@ -369,6 +370,12 @@ function SalesPage() {
     setFilteredSales(sales); // Atualiza para mostrar todas as vendas novamente
   };
 
+  const filtrarProdutos = () => {
+    return filteredSales.filter((produto) =>
+      produto.clientid.toLowerCase().includes(filtroNome.toLowerCase())
+    );
+  };
+
   return (
     <>
       <Grid
@@ -413,6 +420,14 @@ function SalesPage() {
               >
                 Filtrar
               </Button>
+              <TextField
+                label="Filtrar por Nome do Cliente"
+                value={filtroNome}
+                onChange={(e) => setFiltroNome(e.target.value)}
+                fullWidth
+                margin="normal"
+                style={{ color: "#c0844a" }}
+              />
               {filterloading && (
                 <IconButton aria-label="excluir" onClick={clearFilter}>
                   <Typography variant="body1">Desfazer Filtragem</Typography>
@@ -432,7 +447,7 @@ function SalesPage() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {filteredSales.map((sale) => (
+                {filtrarProdutos().map((sale) => (
                   <React.Fragment key={sale.Vendaid}>
                     <TableRow>
                       <TableCell>{sale.Vendaid}</TableCell>

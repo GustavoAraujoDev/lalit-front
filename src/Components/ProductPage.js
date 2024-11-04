@@ -30,6 +30,7 @@ function ProductsPage() {
   const [openAddDialog, setOpenAddDialog] = useState(false);
   const [OpenEditDialog, setOpenEditDialog] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [filtroNome, setFiltroNome] = useState("");
   const [dataToInsert, setDataToInsert] = useState({
     nome: "",
     descricao: "",
@@ -372,6 +373,12 @@ function ProductsPage() {
     });
   };
 
+  const filtrarProdutos = () => {
+    return products.filter((produto) =>
+      produto.nome.toLowerCase().includes(filtroNome.toLowerCase())
+    );
+  };
+
   return (
     <>
       <Grid
@@ -401,6 +408,14 @@ function ProductsPage() {
             >
               Adicionar Produto
             </Button>
+            <TextField
+                label="Filtrar por Nome"
+                value={filtroNome}
+                onChange={(e) => setFiltroNome(e.target.value)}
+                fullWidth
+                margin="normal"
+                style={{ color: "#c0844a" }}
+              />
             <TableContainer component={Paper} style={{ marginTop: "20px" }}>
               <Table>
                 <TableHead>
@@ -418,7 +433,7 @@ function ProductsPage() {
                 </TableHead>
                 <TableBody>
                   {Array.isArray(products) && products.length > 0 ? (
-                    products.map((product) => (
+                    filtrarProdutos().map((product) => (
                       <TableRow key={product.productid}>
                         <TableCell>{product.productid}</TableCell>
                         <TableCell>{product.nome}</TableCell>
